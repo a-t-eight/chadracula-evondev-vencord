@@ -415,7 +415,7 @@ test("Framed Friends and adjacent main pages share the title rail color outside 
   }
 });
 
-test("Friends aligns its header with the DM search row in both layouts", async () => {
+test("Friends aligns with DM search and continues the Framed seam below the header", async () => {
   const { chromium } = require(playwright);
   const browser = await chromium.launch({ executablePath, headless: true });
   try {
@@ -455,9 +455,14 @@ test("Friends aligns its header with the DM search row in both layouts", async (
           const colors = await samplePixels(page, {
             leftPrevious: [65, 67.5], left: [65, 68], leftSecond: [65, 68.5], leftNext: [65, 69],
             rightPrevious: [205, 67.5], right: [205, 68], rightSecond: [205, 68.5], rightNext: [205, 69],
+            sidebarHeaderEdge: [119.5, 40], friendsHeaderEdge: [120.5, 40],
+            sidebarBodyEdge: [119.5, 85], friendsBodyEdge: [120, 85], friendsBodyEdgeSecond: [120.5, 85],
+            friendsBodyInterior: [121, 85], friendsBodyFill: [140, 85], friendsBodyEdgeLower: [120.5, 125],
           });
           if (layout === "flat") {
-            for (const point of Object.keys(colors)) assert.notDeepEqual(colors[point], stroke, `${context}: ${point}`);
+            for (const point of ["leftPrevious", "left", "leftSecond", "leftNext", "rightPrevious", "right", "rightSecond", "rightNext"]) {
+              assert.notDeepEqual(colors[point], stroke, `${context}: ${point}`);
+            }
           } else if (compensated) {
             for (const point of ["left", "leftSecond", "right", "rightSecond"]) assert.deepEqual(colors[point], stroke, `${context}: ${point}`);
             for (const point of ["leftPrevious", "leftNext", "rightPrevious", "rightNext"]) assert.notDeepEqual(colors[point], stroke, `${context}: ${point}`);
@@ -465,6 +470,15 @@ test("Friends aligns its header with the DM search row in both layouts", async (
             assert.deepEqual(colors.rightPrevious, stroke, `${context}: unchanged header stroke`);
             assert.notDeepEqual(colors.right, stroke, `${context}: no added header stroke`);
           }
+          if (layout === "framed" && compensated) {
+            for (const point of ["sidebarHeaderEdge", "friendsHeaderEdge", "sidebarBodyEdge", "friendsBodyEdge", "friendsBodyEdgeSecond", "friendsBodyEdgeLower"]) {
+              equalColor(colors[point], stroke, `${context}: continuous seam at ${point}`);
+            }
+            equalColor(colors.friendsBodyFill, window === "glass" ? [67, 67, 79] : [20, 20, 35], `${context}: body tint`);
+          } else {
+            equalColor(colors.friendsBodyEdge, colors.friendsBodyFill, `${context}: canvas at main-body edge`);
+          }
+          equalColor(colors.friendsBodyInterior, colors.friendsBodyFill, `${context}: single canvas tint inside the seam`);
         }
         await style.evaluate((node) => node.remove());
       }

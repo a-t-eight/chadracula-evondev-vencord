@@ -63,9 +63,9 @@ An isolated smoke test paired OpenAsar `nightly-5a44615` with Vencord `e75ac9a`.
 
 ## Offline Studio
 
-**18 Node tests and 17 Chromium checks passed**, including exact CSS and JSON downloads after importing every variant at 1280 px and 320 px, reload persistence, the two reusable Glass templates, keyboard and custom color controls, and synthetic renderer paint. The three appearance modes were tested against synthetic Discord appearance changes, nested Light settings, custom profile themes and forced colors. Flat and Framed Glass cleared the three renderer backdrop layers in each enabled appearance.
+**18 Node tests and 18 Chromium checks passed**, including exact CSS and JSON downloads after importing every variant at 1280 px and 320 px, reload persistence, the two reusable Glass templates, keyboard and custom color controls, and synthetic renderer paint. The three appearance modes were tested against synthetic Discord appearance changes, nested Light settings, custom profile themes and forced colors. Flat and Framed Glass cleared the three renderer backdrop layers in each enabled appearance.
 
-The current [manifest](themes/manifest.json) has SHA-256 `74c95db0ede17d1483aa3d850a4a9710b8a48194102558d1696d6777fa19a7d0`. All 12 JSON files match the tag byte for byte. Each CSS maps `--card-background-default` to the existing raised surface. The Framed stylesheets round both upper corners of the main panel. The Flat stylesheets round the rail-facing Home sidebar corner and the outer upper corner of Home and guild chat panes. The title bar and rail color fills the space outside the curves.
+The current [manifest](themes/manifest.json) has SHA-256 `074a9ce6e76ba96c80352a996e877c4c529447cc76439f1707afe2b7711ba438`. All 12 JSON files match the tag byte for byte. Each CSS maps `--card-background-default` to the existing raised surface. The Framed stylesheets round both upper corners of the main panel. The Flat stylesheets round the rail-facing Home sidebar corner and the outer upper corner of Home and guild chat panes. The title bar and rail color fills the space outside the curves.
 
 The browser fixtures verify Vencord plugin cards in each active appearance. Pixel checks exercise Framed Friends, DM and guild chat, and representative adjacent page and forum structures. Flat fixtures exercise Quests, Friends and guild chat in Solid and Glass. They sample the rail color outside the curves and the pane colors inside. They also verify that the DM search divider and top Home rule are gone in Flat while the DM group separator and both guild header dividers remain visible. At 2× scale, the Framed Friends stripe crosses both panes on the same pixel rows. The Flat Friends fill edges align and remain free of a divider. The fixtures check that a popout remains interactive beyond the pane perimeter. See [Rebuild and verify](README.md#rebuild-and-verify) to rerun the checks.
 
@@ -88,3 +88,21 @@ Flat Solid and Glass were checked on Friends, Quests and a guild text channel in
 On Friends, the previous Framed divider occupied rows 164–165 beneath DM search and 162–163 beneath the toolbar in both macOS clients at 2× scale. With the corrected Framed Glass and Solid exports, both sides occupied rows 164–165. Flat Glass and Solid showed no divider. A temporary outline measured the two Flat header boxes independently of their fill, and each client was checked again with the outline removed.
 
 A separate Vesktop check isolated a local QuickCSS rule that forced a background on the sidebar shell and its `::after` element. With that rule applied, the outside of the left Flat Glass arc measured `#1B1A2E`. With QuickCSS disabled, both outside corners and the title bar measured `#2D2C3D` on the same backdrop. The full native material matrices above apply to the tagged release.
+
+## Friends seam and Light button contrast
+
+With the Framed Glass switcher in macOS Discord, the vertical seam beside the DM list measured four device pixels through the Friends toolbar and two through the body at 2× scale. After the fix, it measured four pixels at both heights and down the list. Chromium pixel checks covered Framed and Flat in both window finishes, including the collapsed sidebar and adjacent Home routes.
+
+The following contrast ratios are estimates from native Discord Light window captures with the Nord Blue switcher active. The samples use pixels inside the same label and button before and after the fix.
+
+| Control | v1.0.2 | Corrected |
+| --- | ---: | ---: |
+| Find or start a conversation | 1.05:1 | 14.35:1 |
+| No, thanks | 1.15:1 | 11.65:1 |
+| Vencord Quick Actions · Notification Log | 1.15:1 | 11.66:1 |
+| Account · Edit | 1.06:1 | 14.43:1 |
+| Add Friend (primary) | 8.84:1 | 8.84:1 |
+
+Vesktop in Light reproduced the seam change from two to four device pixels below the toolbar. Sampled contrast rose from 1.01:1 to 11.00:1 on the DM search label, from 1.05:1 to 14.38:1 on Account Edit, and from 1.15:1 to 11.55:1 on the Notification Log quick action. With a separate all-appearances Flat Glass export in Light, all nine sampled columns across the join had the same median RGB (41, 41, 53).
+
+Chromium checked the standalone switcher and all three Studio export modes, including hover and pressed text and icons, disabled controls, and nested Light settings. It also checked custom profile themes and forced-color providers.

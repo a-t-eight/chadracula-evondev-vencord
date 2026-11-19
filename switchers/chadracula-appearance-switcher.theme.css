@@ -48,11 +48,11 @@
    Light selects the Nord Blue dark palette. Onyx and legacy AMOLED select Violet.
    Source exports
    chadracula-nord-blue-glass-framed-teal.theme.css
-   SHA-256 5c19f7005ee0c4a38c7a614bbfb5a8f5d73a14adc4547040d6553d8a4e3e9170
+   SHA-256 e3fe9b258059f62368ebb91e84c14e4b2211267ef3469d3bfae8d47f4398ca58
    chadracula-pink-glass-framed-teal.theme.css
-   SHA-256 dfc6ea9e7912cb68e3be1d96308961ec58f30598d49dce9963238ec2f36d1bfe
+   SHA-256 9e33d90cc811015653c184416e4b93f87a28170d871a9969d4672a4d011c9e36
    chadracula-violet-glass-framed-teal.theme.css
-   SHA-256 4ad4eb86a69b304a02020d951cebc39aef374ba60642bf0a6ee5e41f4dd6d3cd
+   SHA-256 d0bcab6e2c5259deceb5864be2163d14b7d043863e0302e496b6fbad388c19ca
 */
 
 @media not (forced-colors: active) {
@@ -165,8 +165,16 @@
   --chad-selected-surface: #11344B;
   --chad-thread-single: #12C6FF;
 }
-:scope.theme-light,
-:scope.theme-light .theme-light { color-scheme: dark; }
+:scope.theme-light:not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *),
+:scope.theme-light .theme-light:not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) {
+  color-scheme: dark;
+  --control-secondary-text-default: var(--chad-text);
+  --control-secondary-text-hover: var(--chad-text);
+  --control-secondary-text-active: var(--chad-text);
+  --control-secondary-icon-default: var(--chad-text);
+  --control-secondary-icon-hover: var(--chad-text);
+  --control-secondary-icon-active: var(--chad-text);
+}
 
 :scope.theme-dark:not(.theme-light, .theme-darker, .theme-midnight, .theme-amoled) {
   --chad-accent: #FF6BCB;
@@ -680,6 +688,11 @@ html:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled) > bo
 
 :is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(:is(.chat_z_gUBg, .chat_f75fb0), :is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)):not(:is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0))) > :is(:is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0)) + :not(:is([role="dialog"], [role="alertdialog"], [role="menu"])) {
   background-color: var(--chad-canvas-paint);
+}
+
+/* Continue the Friends header's inline-start stroke beside the DM list. */
+:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebar_pog62O, .sidebar_c48ade):not([data-collapsed="true"]) :is(.sidebarList_pog62O, .sidebarList_c48ade) > :is(.privateChannels_u88IQl, .privateChannels__35e86) > :is(.searchBar_u88IQl, .searchBar__35e86):not([hidden], [hidden] *, [aria-hidden="true"], [aria-hidden="true"] *)) :is(.container_zrUwGA, .container__133bf) > :is(.themed_ybUK7Z, .themed__9293f) + :is(.tabBody_zrUwGA, .tabBody__133bf) {
+  background: linear-gradient(to var(--chad-inline-end), var(--chad-pane-border) 1px, var(--chad-canvas-paint) 1px) border-box;
 }
 
 :is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.container_zrUwGA, .container__133bf) > :is(.tabBody_zrUwGA, .tabBody__133bf) > :is(.nowPlayingColumn_zrUwGA, .nowPlayingColumn__133bf) {

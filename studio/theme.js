@@ -970,6 +970,11 @@ ${view} ${framedSinglePane} > ${mainHead} + :not(${mainOverlay}) {
   background-color: ${canvasPaint};
 }
 
+/* Continue the Friends header's inline-start stroke beside the DM list. */
+${view}:has(${visibleDMSearch}) ${friends} > ${channelHeader} + ${friendsBody} {
+  background: linear-gradient(to ${inlineEnd}, ${frameLine} 1px, ${canvasPaint} 1px) border-box;
+}
+
 ${view} ${friends} > ${friendsBody} > ${friendsActivity} {
   background: transparent;
 }
@@ -1009,6 +1014,17 @@ ${view} ${framedChat} ${chatContent} ~ ${joinedRoster} {
     return `${selector} {\n${declarations(properties)}\n}`;
   }
 
+  const lightAppearanceCSS = `:scope${light}${excludeDescendants},
+:scope${light} ${light}${excludeDescendants} {
+  color-scheme: dark;
+  --control-secondary-text-default: var(--chad-text);
+  --control-secondary-text-hover: var(--chad-text);
+  --control-secondary-text-active: var(--chad-text);
+  --control-secondary-icon-default: var(--chad-text);
+  --control-secondary-icon-hover: var(--chad-text);
+  --control-secondary-icon-active: var(--chad-text);
+}`;
+
   function allAppearanceCSS(config, values, renderer) {
     const byAppearance = config.appearanceMode === "by-appearance";
     const rolesByAppearance = byAppearance
@@ -1043,8 +1059,7 @@ ${declarationRule(":scope", paletteProperties)}
 /* Resolved preferences. Edit through the studio to recalculate paired colors. */
 ${declarationRule(":scope", common)}
 
-${overrides}:scope${light},
-:scope${light} ${light} { color-scheme: dark; }
+${overrides}${lightAppearanceCSS}
 
 ${declarationRule(semanticScope, discordTokens)}
 ${scopedRenderer}}
@@ -1120,7 +1135,7 @@ ${styles}`;
 
   const theme = Object.freeze({
     defaults, options, palette, colorRoles, appearances, defaultAppearanceMode, uniformityPaint, filename: exportIdentity().filename,
-    normalizeConfig, getColorChoice, setColorChoice, inputColor, roleValues, exportIdentity, exportCSS,
+    normalizeConfig, getColorChoice, setColorChoice, inputColor, roleValues, exportIdentity, exportCSS, lightAppearanceCSS,
   });
   if (typeof module === "object" && module.exports) module.exports = theme;
   else globalThis.ChadraculaTheme = theme;
