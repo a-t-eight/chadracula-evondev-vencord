@@ -492,6 +492,8 @@
   const framedMain = `${mainRegion}:has(> ${mainHeader}, > ${headerWrapper} > ${mainHeader})`;
   const framedSinglePane = `${framedMain}:not(${splitChat})`;
   const privateList = ":is(.privateChannels_u88IQl, .privateChannels__35e86)";
+  const dmSearchRow = ":is(.searchBar_u88IQl, .searchBar__35e86)";
+  const visibleDMSearch = `${sidebarShell}:not([data-collapsed="true"]) ${sidebarList} > ${privateList} > ${dmSearchRow}:not([hidden], [hidden] *, [aria-hidden="true"], [aria-hidden="true"] *)`;
   const memberPanel = ":is(.container_86es0b, .container_c8ffbb, .membersWrap_86es0b:not(.container_86es0b *), .membersWrap_c8ffbb:not(.container_c8ffbb *))";
   const joinedRoster = `${memberPanel}:not([hidden], [aria-hidden="true"])`;
   const memberListPaint = ":is(.members_86es0b, .member_86es0b, .members_c8ffbb, .member_c8ffbb)";
@@ -833,6 +835,12 @@ ${glass ? "" : `\n${transparentGuildNavCSS}`}`;
   }
 
   const guildSidebar = `${sidebarList}:has(> nav:not([hidden]) > #channels)`;
+  const friendsHeaderAlignmentCSS = `/* The DM sidebar still reserves its native 1px top border. Match its search divider. */
+${view}:has(${visibleDMSearch}) ${friends} > ${channelHeader} {
+  min-height: calc(var(--custom-channel-header-height) + 1px);
+}
+`;
+
   function flatUniformityCSS() {
     const borderedChat = `${chat}[data-has-border="true"]`;
     const guildWithBorderedChat = `${view}:has(${borderedChat} > ${chatContent}, ${borderedChat} > ${chatRow} ${chatContent})`;
@@ -840,7 +848,6 @@ ${glass ? "" : `\n${transparentGuildNavCSS}`}`;
     const activeDMList = `${privateList}:not([hidden], [aria-hidden="true"])`;
     const homeSidebar = `${sidebarList}:has(> ${activeDMList}):not(${guildSidebar})`;
     const homeView = `${view}:has(${sidebarList} > ${activeDMList}):not(:has(${sidebarList} > nav:not([hidden]) > #channels))`;
-    const homeSearch = ":is(.searchBar_u88IQl, .searchBar__35e86)";
     const homeMain = `${homeView} :is(${friends}, ${mainPage} > :not(${mainOverlay}, ${chat})):has(> ${mainHeader}, > ${headerWrapper} > ${mainHeader})`;
     const questHome = ".container_ZTJWQo";
     return `
@@ -882,7 +889,7 @@ ${view} ${homeSidebar} {
   border-image: none;
 }
 
-${view} ${homeSidebar} > ${privateList} > ${homeSearch} {
+${view} ${homeSidebar} > ${privateList} > ${dmSearchRow} {
   border-bottom-color: transparent;
 }
 
@@ -902,6 +909,7 @@ ${homeMain} > ${headerWrapper} > ${mainHeader} {
   background-origin: border-box;
 }
 
+${friendsHeaderAlignmentCSS}
 ${homeMain} > ${mainHead} + :not(${mainOverlay}) {
   background-color: ${canvasPaint};
 }
@@ -952,6 +960,7 @@ ${view} ${framedMain} > ${headerWrapper} > ${mainHeader} {
   border-color: transparent;
 }
 
+${friendsHeaderAlignmentCSS}
 /* Paint the header and page body independently so Glass applies one tint. */
 ${view} ${framedSinglePane} {
   background: transparent;

@@ -11,7 +11,7 @@
       "mutedColor": "#ADB9DF",
       "styles": {
         "file": "chadracula-nord-blue-glass-framed-teal.theme.css",
-        "sha256": "b3396041f0167e6b562212e8582309140863ef17f0ec6c087d246f7a060a5d56"
+        "sha256": "5c19f7005ee0c4a38c7a614bbfb5a8f5d73a14adc4547040d6553d8a4e3e9170"
       },
       "configuration": {
         "file": "chadracula-nord-blue-glass-framed-teal.json",
@@ -27,7 +27,7 @@
       "mutedColor": "#ADB9DF",
       "styles": {
         "file": "chadracula-nord-blue-glass-flat-teal.theme.css",
-        "sha256": "d7c1449dbbd7ec0d33945f7f4fa38da58a72b73ee578db76ea26d13595c60468"
+        "sha256": "4935492cad8b9eb7d306eb3133c76807bda7fc49bdee37d88044d70bb4861442"
       },
       "configuration": {
         "file": "chadracula-nord-blue-glass-flat-teal.json",
@@ -43,7 +43,7 @@
       "mutedColor": "#92A2D4",
       "styles": {
         "file": "chadracula-nord-blue-solid-framed-teal.theme.css",
-        "sha256": "419f8f82f6ce8405b3d10078210b038a1191fa01235c06badb0298b761ed1bfb"
+        "sha256": "ff1ebe020dd54b86e311b92fb802d61ccb9fda0e5aad55b1ccabaa1b2b58415a"
       },
       "configuration": {
         "file": "chadracula-nord-blue-solid-framed-teal.json",
@@ -59,7 +59,7 @@
       "mutedColor": "#92A2D4",
       "styles": {
         "file": "chadracula-nord-blue-solid-flat-teal.theme.css",
-        "sha256": "4498c41cc0e3e7a9a998931ea8d1dd49c39892055cfc213f36cd027b4b5b2e50"
+        "sha256": "34891b54ff3814a56448efcaf4284f5f94b13fb160797853b04b3cd028fbc3c9"
       },
       "configuration": {
         "file": "chadracula-nord-blue-solid-flat-teal.json",
@@ -75,7 +75,7 @@
       "mutedColor": "#ADB9DF",
       "styles": {
         "file": "chadracula-pink-glass-framed-teal.theme.css",
-        "sha256": "077624fdeb1e3c85a4dda238646d51a1de17530305b042021c208bfa04c4e065"
+        "sha256": "dfc6ea9e7912cb68e3be1d96308961ec58f30598d49dce9963238ec2f36d1bfe"
       },
       "configuration": {
         "file": "chadracula-pink-glass-framed-teal.json",
@@ -91,7 +91,7 @@
       "mutedColor": "#ADB9DF",
       "styles": {
         "file": "chadracula-pink-glass-flat-teal.theme.css",
-        "sha256": "88329292e442005ad606d2792824b971997a3f9af454d3bb9335c3b87b93ebcf"
+        "sha256": "952daf24d9a0ac6fa4bed4e0676671a4ffb484fec45f6ebe53bbb7d31d538acf"
       },
       "configuration": {
         "file": "chadracula-pink-glass-flat-teal.json",
@@ -107,7 +107,7 @@
       "mutedColor": "#92A2D4",
       "styles": {
         "file": "chadracula-pink-solid-framed-teal.theme.css",
-        "sha256": "c0b052c507c4f1111e479ad8132223fc647e15fd628a336a2c642070f6358a04"
+        "sha256": "4592671a4de662f2fe31c2c3bad49f4bfab9d98a33d43521019c0baeb54a03f1"
       },
       "configuration": {
         "file": "chadracula-pink-solid-framed-teal.json",
@@ -123,7 +123,7 @@
       "mutedColor": "#92A2D4",
       "styles": {
         "file": "chadracula-pink-solid-flat-teal.theme.css",
-        "sha256": "a96c840a432772df5dc8032ae0ed3f236a1073db338b5b60b0ad9b2e31c8e840"
+        "sha256": "557664dac0f46346bf46208d37af6dbea9470bc4c99256181079805f7921776b"
       },
       "configuration": {
         "file": "chadracula-pink-solid-flat-teal.json",
@@ -139,7 +139,7 @@
       "mutedColor": "#ADB9DF",
       "styles": {
         "file": "chadracula-violet-glass-framed-teal.theme.css",
-        "sha256": "fa9dc059eb9e9d4eff99b495d62975beff081e17566cb682d4f0e8caeb2a2bfd"
+        "sha256": "4ad4eb86a69b304a02020d951cebc39aef374ba60642bf0a6ee5e41f4dd6d3cd"
       },
       "configuration": {
         "file": "chadracula-violet-glass-framed-teal.json",
@@ -155,7 +155,7 @@
       "mutedColor": "#ADB9DF",
       "styles": {
         "file": "chadracula-violet-glass-flat-teal.theme.css",
-        "sha256": "797be7e3d75d7ef12ee19639c45124d8245d8f7b8b549e143b6f77b8efccbe28"
+        "sha256": "59c8184a00d3e3c11d68de96d328c111206e97e729e17ca4c278e77143b58aab"
       },
       "configuration": {
         "file": "chadracula-violet-glass-flat-teal.json",
@@ -171,7 +171,7 @@
       "mutedColor": "#92A2D4",
       "styles": {
         "file": "chadracula-violet-solid-framed-teal.theme.css",
-        "sha256": "4762d2659bcf7b21c6ffb52b01a2dfd0825f69dc2063bf348212af1983793d2f"
+        "sha256": "4782b760a2199372b59fe88fc74f5d4f2e28624943c234d2cf26384fca82c8ea"
       },
       "configuration": {
         "file": "chadracula-violet-solid-framed-teal.json",
@@ -187,7 +187,7 @@
       "mutedColor": "#92A2D4",
       "styles": {
         "file": "chadracula-violet-solid-flat-teal.theme.css",
-        "sha256": "8091834aa27e060f04fb15b799947014891098f49f48c4d38f3016c4bc1ed74a"
+        "sha256": "663d5f2bb8e5debbccfd42680556948d1fda8459c5f9a5bde6d253768f7151d2"
       },
       "configuration": {
         "file": "chadracula-violet-solid-flat-teal.json",

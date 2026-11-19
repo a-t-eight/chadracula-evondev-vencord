@@ -415,12 +415,72 @@ test("Framed Friends and adjacent main pages share the title rail color outside 
   }
 });
 
+test("Friends aligns its header with the DM search row in both layouts", async () => {
+  const { chromium } = require(playwright);
+  const browser = await chromium.launch({ executablePath, headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 360, height: 180 }, deviceScaleFactor: 2 });
+    await page.setContent(`<!doctype html><html class="theme-dark"><head><style>
+      html { background: white; --custom-channel-header-height: 48px; }
+      * { box-sizing: border-box; }
+      #sidebar { position: absolute; left: 10px; top: 20px; width: 110px; height: 140px;
+        border-top: 1px solid var(--app-frame-border); }
+      .sidebar_pog62O[data-collapsed="true"] #sidebar { border-top-width: 0; }
+      #friends { position: absolute; left: 120px; top: 20px; width: 220px; height: 140px;
+        border-top: 1px solid var(--app-frame-border); }
+      #search, #header { height: var(--custom-channel-header-height); border-bottom: 1px solid var(--border-subtle); }
+      .tabBody_zrUwGA { height: 91px; }
+    </style></head><body><div id="app-mount">
+      <div id="shell" class="sidebar_pog62O"><aside id="sidebar" class="sidebarList_pog62O"><nav class="privateChannels_u88IQl">
+        <div id="search" class="searchBar_u88IQl"></div>
+      </nav></aside></div>
+      <main class="page_pog62O"><div id="friends" class="container_zrUwGA">
+        <header id="header" class="container_ybUK7Z themed_ybUK7Z"></header><div class="tabBody_zrUwGA"></div>
+      </div></main>
+    </div></body></html>`);
+    const stroke = [45, 45, 78];
+    for (const window of ["solid", "glass"]) {
+      for (const layout of ["framed", "flat"]) {
+        const style = await page.addStyleTag({ content: exportCSS({ layout, window, opacity: 80 }) });
+        for (const state of ["friends", "collapsed", "other-page"]) {
+          await page.evaluate((state) => {
+            document.getElementById("shell").dataset.collapsed = String(state === "collapsed");
+            document.getElementById("friends").className = state === "other-page" ? "another-home-page" : "container_zrUwGA";
+          }, state);
+          const context = `${window} / ${layout} / ${state}`;
+          const compensated = state === "friends";
+          const rows = await page.evaluate(() => ["search", "header"].map((id) => document.getElementById(id).getBoundingClientRect().bottom));
+          const searchBottom = state === "collapsed" ? 68 : 69;
+          assert.deepEqual(rows, [searchBottom, compensated ? 69 : 68], context);
+          const colors = await samplePixels(page, {
+            leftPrevious: [65, 67.5], left: [65, 68], leftSecond: [65, 68.5], leftNext: [65, 69],
+            rightPrevious: [205, 67.5], right: [205, 68], rightSecond: [205, 68.5], rightNext: [205, 69],
+          });
+          if (layout === "flat") {
+            for (const point of Object.keys(colors)) assert.notDeepEqual(colors[point], stroke, `${context}: ${point}`);
+          } else if (compensated) {
+            for (const point of ["left", "leftSecond", "right", "rightSecond"]) assert.deepEqual(colors[point], stroke, `${context}: ${point}`);
+            for (const point of ["leftPrevious", "leftNext", "rightPrevious", "rightNext"]) assert.notDeepEqual(colors[point], stroke, `${context}: ${point}`);
+          } else {
+            assert.deepEqual(colors.rightPrevious, stroke, `${context}: unchanged header stroke`);
+            assert.notDeepEqual(colors.right, stroke, `${context}: no added header stroke`);
+          }
+        }
+        await style.evaluate((node) => node.remove());
+      }
+    }
+  } finally {
+    await browser.close();
+  }
+});
+
 test("Flat Home rounds its rail-facing sidebar and outer main corner and removes only the extra rules", async () => {
   const { chromium } = require(playwright);
   const browser = await chromium.launch({ executablePath, headless: true });
   try {
     const page = await browser.newPage({ viewport: { width: 360, height: 200 } });
     await page.setContent(`<!doctype html><html class="theme-dark"><head><style>
+      html { --custom-channel-header-height: 36px; }
       #title { position: absolute; inset: 0 0 auto; height: 20px; }
       #sidebar { position: absolute; left: 20px; top: 20px; width: 120px; height: 155px;
         box-sizing: border-box; border-top: 1px solid var(--app-frame-border); }
@@ -433,10 +493,10 @@ test("Flat Home rounds its rail-facing sidebar and outer main corner and removes
       #content { height: 110px; }
       #quest-art { margin: 10px; width: 120px; height: 65px; background: orange; }
     </style></head><body><div id="app-mount"><div id="title" class="bar_3zSH5d"></div>
-      <aside id="sidebar" class="sidebarList_pog62O"><nav class="privateChannels_u88IQl">
+      <div class="sidebar_pog62O"><aside id="sidebar" class="sidebarList_pog62O"><nav class="privateChannels_u88IQl">
         <div id="search" class="searchBar_u88IQl"><button>Find a conversation</button></div>
         <div id="home-divider" class="sectionDivider_u88IQl"></div>
-      </nav></aside>
+      </nav></aside></div>
       <main class="page_pog62O"><div id="main" class="container_ZTJWQo">
         <div id="tabs" class="tabs_ZTJWQo"></div><div id="content"><div id="quest-art"></div></div>
       </div></main>

@@ -591,6 +591,11 @@
   border-color: transparent;
 }
 
+/* The DM sidebar still reserves its native 1px top border. Match its search divider. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebar_pog62O, .sidebar_c48ade):not([data-collapsed="true"]) :is(.sidebarList_pog62O, .sidebarList_c48ade) > :is(.privateChannels_u88IQl, .privateChannels__35e86) > :is(.searchBar_u88IQl, .searchBar__35e86):not([hidden], [hidden] *, [aria-hidden="true"], [aria-hidden="true"] *)) :is(.container_zrUwGA, .container__133bf) > :is(.themed_ybUK7Z, .themed__9293f) {
+  min-height: calc(var(--custom-channel-header-height) + 1px);
+}
+
 /* Paint the header and page body independently so Glass applies one tint. */
 :is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(:is(.chat_z_gUBg, .chat_f75fb0), :is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)):not(:is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0))) {
   background: transparent;

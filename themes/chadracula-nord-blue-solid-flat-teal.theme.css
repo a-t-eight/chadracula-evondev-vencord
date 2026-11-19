@@ -618,6 +618,11 @@
   background-origin: border-box;
 }
 
+/* The DM sidebar still reserves its native 1px top border. Match its search divider. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebar_pog62O, .sidebar_c48ade):not([data-collapsed="true"]) :is(.sidebarList_pog62O, .sidebarList_c48ade) > :is(.privateChannels_u88IQl, .privateChannels__35e86) > :is(.searchBar_u88IQl, .searchBar__35e86):not([hidden], [hidden] *, [aria-hidden="true"], [aria-hidden="true"] *)) :is(.container_zrUwGA, .container__133bf) > :is(.themed_ybUK7Z, .themed__9293f) {
+  min-height: calc(var(--custom-channel-header-height) + 1px);
+}
+
 :is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > :is(.privateChannels_u88IQl, .privateChannels__35e86):not([hidden], [aria-hidden="true"])):not(:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > nav:not([hidden]) > #channels)) :is(:is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]), :is(.chat_z_gUBg, .chat_f75fb0))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)) > :is(:is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0)) + :not(:is([role="dialog"], [role="alertdialog"], [role="menu"])) {
   background-color: var(--chad-canvas-paint);
 }
