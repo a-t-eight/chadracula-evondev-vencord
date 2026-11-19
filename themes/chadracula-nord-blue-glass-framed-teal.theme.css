@@ -1,0 +1,667 @@
+/**
+ * @name chadracula-nord-blue-glass-framed-teal
+ * @description nord blue, teal muted text, framed, glass, supports transparency - adapted chadracula-evondev for discord
+ * @author a-t-eight
+ * @version 1.0.1
+ */
+
+/* Palette provenance
+   evondev created the original Evondev Dracula theme for VS Code.
+   The original theme credits Dracula Official.
+   https://github.com/evondev/evondev-dracula
+
+   BrunoKrugel introduced the chadracula-evondev adaptation to NvChad Base46.
+   https://github.com/NvChad/base46/pull/242
+
+   The standalone Discord port maps the Base30 and Base16 palettes from
+   NvChad/base46 commit 267954c8663607823f03a3259bb8deb15688212f to Discord
+   roles. The export retains the palette names and aliases for reference.
+   https://github.com/NvChad/base46/blob/267954c8663607823f03a3259bb8deb15688212f/lua/base46/themes/chadracula-evondev.lua
+
+   NvChad Base46 includes the upstream license notice below at this commit.
+   https://github.com/NvChad/base46/blob/267954c8663607823f03a3259bb8deb15688212f/LICENSE
+
+   nvim-base16.lua is a library for modifying themes with Lua
+   Copyright © 2019 Ashkan Kiani
+
+   Permission is hereby granted, free of charge, to any person obtaining
+   a copy of this software and associated documentation files (the "Software"),
+   to deal in the Software without restriction, including without limitation
+   the rights to use, copy, modify, merge, publish, distribute, sublicense,
+   and/or sell copies of the Software, and to permit persons to whom the
+   Software is furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be included
+   in all copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+   OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+   DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+   TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+   OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
+:root {
+  --chad-base30-white: #F8F8F2;
+  --chad-base30-darker_black: #19192C;
+  --chad-base30-black: #141423;
+  --chad-base30-black2: #1C1C31;
+  --chad-base30-one_bg: #23233D;
+  --chad-base30-one_bg2: #2B2B4C;
+  --chad-base30-one_bg3: #373760;
+  --chad-base30-grey: #414171;
+  --chad-base30-grey_fg: #4B4B83;
+  --chad-base30-grey_fg2: #555594;
+  --chad-base30-light_grey: #6060A4;
+  --chad-base30-red: #FF5555;
+  --chad-base30-baby_pink: #FF6E6E;
+  --chad-base30-pink: #FF6BCB;
+  --chad-base30-line: #2D2D4E;
+  --chad-base30-green: #50FA7B;
+  --chad-base30-vibrant_green: #20E3B2;
+  --chad-base30-nord_blue: #05C3FF;
+  --chad-base30-blue: #2CCCFF;
+  --chad-base30-yellow: #F1FA8C;
+  --chad-base30-sun: #F2FA95;
+  --chad-base30-purple: #BD93F9;
+  --chad-base30-dark_purple: #A166F6;
+  --chad-base30-teal: #92A2D4;
+  --chad-base30-orange: #FFB86C;
+  --chad-base30-cyan: #2CCCFF;
+  --chad-base30-statusline_bg: #19192C;
+  --chad-base30-lightbg: #2B2B4C;
+  --chad-base30-pmenu_bg: #9A86FD;
+  --chad-base30-folder_bg: #9A86FD;
+  --chad-base30-violet: #9A86FD;
+  --chad-base30-darkgreen: #1B312E;
+  --chad-base30-brownred: #5D2932;
+  --chad-base16-base00: #141423;
+  --chad-base16-base01: #23233D;
+  --chad-base16-base02: #2B2B4C;
+  --chad-base16-base03: #373760;
+  --chad-base16-base04: #414171;
+  --chad-base16-base05: #E9E9F4;
+  --chad-base16-base06: #F1F2F8;
+  --chad-base16-base07: #F7F7FB;
+  --chad-base16-base08: #C197FD;
+  --chad-base16-base09: #FFB86C;
+  --chad-base16-base0A: #62D6E8;
+  --chad-base16-base0B: #E5C697;
+  --chad-base16-base0C: #8BE9FD;
+  --chad-base16-base0D: #20E3B2;
+  --chad-base16-base0E: #FF6BCB;
+  --chad-base16-base0F: #7E7EB5;
+
+  /* Resolved preferences. Edit through the studio to recalculate paired colors. */
+  --chad-canvas: #141423;
+  --chad-sidebar: #141423;
+  --chad-rail: #19192C;
+  --chad-raised: #23233D;
+  --chad-input: #141423;
+  --chad-text: #F8F8F2;
+  --chad-muted: #ADB9DF;
+  --chad-subtle-text: #E9E9F4;
+  --chad-border: #2D2D4E;
+  --chad-control-border: #9090BF;
+  --chad-hover: #252541;
+  --chad-active: #2C2C4C;
+  --chad-accent: #05C3FF;
+  --chad-accent-text: #12C6FF;
+  --chad-on-accent: #141423;
+  --chad-accent-hover: #06BAF4;
+  --chad-accent-active: #06B3EB;
+  --chad-link: #FF97DB;
+  --chad-selected: #11344B;
+  --chad-selected-text: #F8F8F2;
+  --chad-selected-surface: #11344B;
+  --chad-mention: #FFA1A1;
+  --chad-mention-bg: #2C1D2B;
+  --chad-mention-hover: #3C2330;
+  --chad-mention-chip-bg: #452733;
+  --chad-success: #50FA7B;
+  --chad-danger: #FFA1A1;
+  --chad-warning: #F1FA8C;
+  --chad-info: #62D6E8;
+  --chad-danger-bg: #5D2932;
+  --chad-danger-hover: #682E36;
+  --chad-danger-active: #74333A;
+  --chad-success-bg: #1B312E;
+  --chad-pane-radius: 10px;
+  --chad-pane-frame: inset 0 0 0 1px var(--chad-border);
+  --chad-pane-border: var(--chad-border);
+  --chad-window-opacity: 0.8;
+  --chad-syntax-comment: #7E7EB5;
+  --chad-syntax-keyword: #FF6BCB;
+  --chad-syntax-string: #E5C697;
+  --chad-syntax-function: #50FA7B;
+  --chad-syntax-call: #20E3B2;
+  --chad-syntax-builtin: #2CCCFF;
+  --chad-syntax-type: #2CCCFF;
+  --chad-syntax-number: #BD93F9;
+  --chad-syntax-constant: #9A86FD;
+  --chad-syntax-operator: #C197FD;
+  --chad-thread-single: #12C6FF;
+  --chad-thread-1: #FF9191;
+  --chad-thread-2: #FFB86C;
+  --chad-thread-3: #F1FA8C;
+  --chad-thread-4: #50FA7B;
+  --chad-thread-5: #2CCCFF;
+  --chad-thread-6: #C7A3FA;
+}
+
+@media not (forced-colors: active) {
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) {
+  --app-frame-background: var(--chad-rail);
+  --background-base-lowest: var(--chad-rail);
+  --background-tertiary: var(--chad-rail);
+  --bg-base-tertiary: var(--chad-rail);
+  --background-base-lower: var(--chad-canvas);
+  --background-primary: var(--chad-canvas);
+  --bg-base-primary: var(--chad-canvas);
+  --background-base-low: var(--chad-sidebar);
+  --background-secondary: var(--chad-sidebar);
+  --bg-base-secondary: var(--chad-sidebar);
+  --channel-background-default: var(--chad-sidebar);
+  --custom-channel-members-bg: var(--chad-sidebar);
+  --chat-background-default: var(--chad-input);
+  --channeltextarea-background: var(--chad-input);
+  --input-background: var(--chad-input);
+  --input-background-default: var(--chad-input);
+  --background-code: var(--chad-input);
+  --card-secondary-bg: var(--chad-input);
+  --background-surface-high: var(--chad-raised);
+  --background-surface-higher: var(--chad-raised);
+  --background-surface-highest: var(--chad-raised);
+  --background-floating: var(--chad-raised);
+  --background-nested-floating: var(--chad-raised);
+  --background-accent: var(--chad-raised);
+  --background-secondary-alt: var(--chad-raised);
+  --bg-surface-overlay: var(--chad-raised);
+  --bg-surface-raised: var(--chad-raised);
+  --card-primary-bg: var(--chad-raised);
+  --modal-background: var(--chad-raised);
+  --modal-footer-background: var(--chad-raised);
+  --autocomplete-bg: var(--chad-raised);
+  --app-frame-border: var(--chad-border);
+  --border-faint: var(--chad-border);
+  --border-muted: var(--chad-border);
+  --border-subtle: var(--chad-border);
+  --border-normal: var(--chad-border);
+  --border-strong: var(--chad-control-border);
+  --input-border: var(--chad-control-border);
+  --input-border-default: var(--chad-control-border);
+  --input-border-hover: var(--chad-control-border);
+  --checkbox-border-default: var(--chad-control-border);
+  --checkbox-border-hover: var(--chad-control-border);
+  --scrollbar-auto-thumb: var(--chad-control-border);
+  --scrollbar-thin-thumb: var(--chad-control-border);
+  --scrollbar-auto-scrollbar-color-thumb: var(--chad-control-border);
+  --control-primary-border-default: var(--chad-control-border);
+  --control-primary-border-hover: var(--chad-control-border);
+  --control-primary-border-active: var(--chad-control-border);
+  --button-filled-brand-border: var(--chad-control-border);
+  --text-default: var(--chad-text);
+  --text-normal: var(--chad-text);
+  --text-primary: var(--chad-text);
+  --text-strong: var(--chad-text);
+  --text-code: var(--chad-text);
+  --header-primary: var(--chad-text);
+  --interactive-active: var(--chad-text);
+  --interactive-hover: var(--chad-text);
+  --interactive-text-active: var(--chad-text);
+  --interactive-text-hover: var(--chad-text);
+  --interactive-icon-active: var(--chad-text);
+  --interactive-icon-hover: var(--chad-text);
+  --input-text-default: var(--chad-text);
+  --input-text-error-default: var(--chad-text);
+  --icon-strong: var(--chad-text);
+  --control-critical-primary-text-default: var(--chad-text);
+  --control-critical-primary-text-hover: var(--chad-text);
+  --control-critical-primary-text-active: var(--chad-text);
+  --control-critical-primary-icon-default: var(--chad-text);
+  --control-critical-primary-icon-hover: var(--chad-text);
+  --control-critical-primary-icon-active: var(--chad-text);
+  --text-secondary: var(--chad-subtle-text);
+  --text-subtle: var(--chad-subtle-text);
+  --header-secondary: var(--chad-subtle-text);
+  --icon-primary: var(--chad-subtle-text);
+  --icon-default: var(--chad-subtle-text);
+  --text-muted: var(--chad-muted);
+  --text-tertiary: var(--chad-muted);
+  --text-low-contrast: var(--chad-muted);
+  --channels-default: var(--chad-muted);
+  --channel-icon: var(--chad-muted);
+  --channel-text-area-placeholder: var(--chad-muted);
+  --chat-text-muted: var(--chad-muted);
+  --input-placeholder-text-default: var(--chad-muted);
+  --interactive-text-default: var(--chad-muted);
+  --interactive-normal: var(--chad-muted);
+  --interactive-icon-default: var(--chad-muted);
+  --icon-secondary: var(--chad-muted);
+  --icon-tertiary: var(--chad-muted);
+  --icon-subtle: var(--chad-muted);
+  --icon-muted: var(--chad-muted);
+  --input-icon-default: var(--chad-muted);
+  --text-link: var(--chad-link);
+  --text-link-low-saturation: var(--chad-link);
+  --icon-link: var(--chad-link);
+  --text-code-link: var(--chad-link);
+  --background-brand: var(--chad-accent);
+  --bg-brand: var(--chad-accent);
+  --control-primary-background-default: var(--chad-accent);
+  --button-filled-brand-background: var(--chad-accent);
+  --checkbox-background-selected-default: var(--chad-accent);
+  --control-primary-background-hover: var(--chad-accent-hover);
+  --button-filled-brand-background-hover: var(--chad-accent-hover);
+  --checkbox-background-selected-hover: var(--chad-accent-hover);
+  --control-primary-background-active: var(--chad-accent-active);
+  --button-filled-brand-background-active: var(--chad-accent-active);
+  --checkbox-background-active: var(--chad-accent-active);
+  --text-brand: var(--chad-accent-text);
+  --icon-brand: var(--chad-accent-text);
+  --control-brand-foreground: var(--chad-accent-text);
+  --control-brand-foreground-new: var(--chad-accent-text);
+  --selected-tab-item-color: var(--chad-accent-text);
+  --border-focus: var(--chad-accent-text);
+  --input-border-active: var(--chad-accent-text);
+  --control-primary-text-default: var(--chad-on-accent);
+  --control-primary-text-hover: var(--chad-on-accent);
+  --control-primary-text-active: var(--chad-on-accent);
+  --control-primary-icon-default: var(--chad-on-accent);
+  --control-primary-icon-hover: var(--chad-on-accent);
+  --control-primary-icon-active: var(--chad-on-accent);
+  --button-filled-brand-text: var(--chad-on-accent);
+  --checkbox-icon-active: var(--chad-on-accent);
+  --background-modifier-hover: var(--chad-hover);
+  --background-mod-muted: var(--chad-hover);
+  --background-mod-subtle: var(--chad-hover);
+  --interactive-background-hover: var(--chad-hover);
+  --message-background-hover: var(--chad-hover);
+  --background-message-hover: var(--chad-hover);
+  --control-secondary-background-hover: var(--chad-hover);
+  --control-icon-only-background-hover: var(--chad-hover);
+  --button-outline-brand-background-hover: var(--chad-hover);
+  --background-modifier-active: var(--chad-active);
+  --background-mod-normal: var(--chad-active);
+  --interactive-background-active: var(--chad-active);
+  --control-secondary-background-active: var(--chad-active);
+  --control-icon-only-background-active: var(--chad-active);
+  --background-modifier-selected: var(--chad-selected-surface);
+  --background-mod-strong: var(--chad-selected-surface);
+  --interactive-background-selected: var(--chad-selected-surface);
+  --interactive-accent-background-selected: var(--chad-selected-surface);
+  --interactive-accent-background-hover: var(--chad-selected-surface);
+  --interactive-accent-background-active: var(--chad-selected-surface);
+  --message-highlight-background-default: var(--chad-selected-surface);
+  --background-message-highlight: var(--chad-selected-surface);
+  --mention-foreground: var(--chad-mention);
+  --message-mentioned-background-default: var(--chad-mention-bg);
+  --background-mentioned: var(--chad-mention-bg);
+  --message-mentioned-background-hover: var(--chad-mention-hover);
+  --background-mentioned-hover: var(--chad-mention-hover);
+  --mention-background: var(--chad-mention-chip-bg);
+  --text-feedback-positive: var(--chad-success);
+  --text-positive: var(--chad-success);
+  --icon-feedback-positive: var(--chad-success);
+  --status-positive: var(--chad-success);
+  --status-speaking: var(--chad-success);
+  --icon-voice-speaking: var(--chad-success);
+  --icon-status-online: var(--chad-success);
+  --text-feedback-critical: var(--chad-danger);
+  --text-danger: var(--chad-danger);
+  --icon-feedback-critical: var(--chad-danger);
+  --status-danger: var(--chad-danger);
+  --icon-status-dnd: var(--chad-danger);
+  --text-feedback-warning: var(--chad-warning);
+  --text-warning: var(--chad-warning);
+  --icon-feedback-warning: var(--chad-warning);
+  --status-warning: var(--chad-warning);
+  --icon-status-idle: var(--chad-warning);
+  --text-feedback-info: var(--chad-info);
+  --icon-feedback-info: var(--chad-info);
+  --background-feedback-mod-critical: var(--chad-danger-bg);
+  --background-code-deletion: var(--chad-danger-bg);
+  --control-critical-primary-background-default: var(--chad-danger-bg);
+  --button-danger-background: var(--chad-danger-bg);
+  --control-critical-primary-background-hover: var(--chad-danger-hover);
+  --button-danger-background-hover: var(--chad-danger-hover);
+  --control-critical-primary-background-active: var(--chad-danger-active);
+  --button-danger-background-active: var(--chad-danger-active);
+  --background-feedback-mod-positive: var(--chad-success-bg);
+  --background-code-addition: var(--chad-success-bg);
+  --text-code-comment: var(--chad-syntax-comment);
+  --text-code-keyword: var(--chad-syntax-keyword);
+  --text-code-tag: var(--chad-syntax-keyword);
+  --text-code-escape: var(--chad-syntax-keyword);
+  --text-code-string: var(--chad-syntax-string);
+  --text-code-regexp: var(--chad-syntax-string);
+  --text-code-title: var(--chad-syntax-function);
+  --text-code-attribute: var(--chad-syntax-call);
+  --text-code-property: var(--chad-syntax-call);
+  --text-code-builtin: var(--chad-syntax-builtin);
+  --text-code-bullet: var(--chad-syntax-builtin);
+  --text-code-type: var(--chad-syntax-type);
+  --text-code-number: var(--chad-syntax-number);
+  --text-code-decorator: var(--chad-syntax-constant);
+  --text-code-operator: var(--chad-syntax-operator);
+}
+
+/* Main panes use one paint layer each. Layout controls affect decoration only. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.bg_Fd0FEH, .bg__960e4) {
+  background: var(--chad-rail);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) {
+  background-color: var(--chad-sidebar);
+  border-color: var(--chad-pane-border);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.privateChannels_u88IQl, .privateChannels__35e86),
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) :is(.guildSidebar_iar92T, .scroller_Bce46W, .container__2637a, .scroller__629e4, .scroller__99e7c) {
+  background: transparent;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0) {
+  background: var(--chad-canvas);
+  border-color: var(--chad-pane-border);
+  border-start-start-radius: var(--chad-pane-radius);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chatContent_z_gUBg, .chatContent_f75fb0) {
+  background: transparent;
+  box-shadow: var(--chad-pane-frame);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.themed_ybUK7Z, .themed__9293f) {
+  --__header-bar-background: var(--chad-sidebar);
+  background: var(--__header-bar-background);
+  border-bottom-color: var(--chad-pane-border);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.container_86es0b, .container_c8ffbb, .membersWrap_86es0b:not(.container_86es0b *), .membersWrap_c8ffbb:not(.container_c8ffbb *)) {
+  background: var(--chad-sidebar);
+  border-color: var(--chad-pane-border);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.container_86es0b, .container_c8ffbb, .membersWrap_86es0b:not(.container_86es0b *), .membersWrap_c8ffbb:not(.container_c8ffbb *)) :is(.members_86es0b, .member_86es0b, .members_c8ffbb, .member_c8ffbb) {
+  background: transparent;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.container_zrUwGA, .container__133bf) {
+  background: var(--chad-canvas);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.searchResultsWrap_QHVbp3, .searchResultsWrap_a9e706) {
+  background: var(--chad-sidebar);
+}
+
+/* Discord's filled legacy controls sometimes read a generic white token.
+   Scope ink corrections here, preserving identity and unrelated overlays. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.tabBar_zrUwGA, .tabBar__133bf) :is(.addFriend_zrUwGA, .addFriend__133bf):not([aria-selected="true"]),
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.tabBar_zrUwGA, .tabBar__133bf) :is(.addFriend_zrUwGA, .addFriend__133bf):not([aria-selected="true"]):hover {
+  color: var(--chad-on-accent);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.lookFilled_9OQtot, .lookFilled__201d5):is(.colorRed_9OQtot, .colorRed__201d5) {
+  color: var(--chad-base30-white);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.lookOutlined_9OQtot, .lookOutlined__201d5):is(.colorRed_9OQtot, .colorRed__201d5) {
+  color: var(--chad-danger);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.lookFilled_9OQtot, .lookFilled__201d5):is(.colorLink_9OQtot, .colorLink__201d5) {
+  background: var(--chad-selected-surface);
+  color: var(--chad-link);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .lookFilled_9OQtot:is(.colorBrandInverted_9OQtot, .colorWhite_9OQtot) {
+  --control-primary-text-default: var(--chad-base30-black);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.lookLink_9OQtot, .lookLink__201d5):is(.colorBrand_9OQtot, .colorBrand__201d5) {
+  --brand-500: var(--chad-accent-text);
+}
+
+/* Use the chosen selection fill for explicit navigation rows and leave
+   generic interactive backgrounds safe for controls with independent ink. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.privateChannels_u88IQl, .privateChannels__35e86) :is(.selected_J1Adu_ .childContainer_J1Adu_, .selected_bf202d),
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) :is(.modeSelected__2ea32 .link__2ea32, a[aria-current="page"][href^="/channels/"]) {
+  --channels-default: var(--chad-selected-text);
+  --interactive-text-active: var(--chad-selected-text);
+  --interactive-icon-active: var(--chad-selected-text);
+  --icon-strong: var(--chad-selected-text);
+  --text-default: var(--chad-selected-text);
+  --text-strong: var(--chad-selected-text);
+  background-color: var(--chad-selected);
+  color: var(--chad-selected-text);
+}
+
+/* Highlight messages without changing the actual sender color. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.mentioned_SY_P2T, .mentioned__5126c)::before {
+  background-color: var(--chad-mention);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.markup_ku1OHH, .markup__75297) :is(pre code, code.inline) {
+  background-color: var(--chad-input);
+  color: var(--chad-text);
+}
+
+/* Highlight.js fallback used by older and some embedded code views. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-comment,
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-quote { color: var(--chad-syntax-comment); }
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-keyword,
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-selector-tag,
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-meta .hljs-keyword { color: var(--chad-syntax-keyword); }
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-string,
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-regexp { color: var(--chad-syntax-string); }
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-title.function_,
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-function > .hljs-title { color: var(--chad-syntax-function); }
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-property,
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-variable.function_ { color: var(--chad-syntax-call); }
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-built_in { color: var(--chad-syntax-builtin); }
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-type,
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-title.class_ { color: var(--chad-syntax-type); }
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-number { color: var(--chad-syntax-number); }
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-literal,
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-symbol { color: var(--chad-syntax-constant); }
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-addition { color: var(--chad-success); background-color: var(--chad-success-bg); }
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount .hljs-deletion { color: var(--chad-danger); background-color: var(--chad-danger-bg); }
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) ul[class^="content_"] > li[class^="container_"] > ul[role="group"] > li:nth-of-type(6n + 1) {
+  --channels-default: var(--chad-thread-1);
+}
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) ul[class^="content_"] > li[class^="container_"] > ul[role="group"] > li:nth-of-type(6n + 2) {
+  --channels-default: var(--chad-thread-2);
+}
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) ul[class^="content_"] > li[class^="container_"] > ul[role="group"] > li:nth-of-type(6n + 3) {
+  --channels-default: var(--chad-thread-3);
+}
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) ul[class^="content_"] > li[class^="container_"] > ul[role="group"] > li:nth-of-type(6n + 4) {
+  --channels-default: var(--chad-thread-4);
+}
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) ul[class^="content_"] > li[class^="container_"] > ul[role="group"] > li:nth-of-type(6n + 5) {
+  --channels-default: var(--chad-thread-5);
+}
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) ul[class^="content_"] > li[class^="container_"] > ul[role="group"] > li:nth-of-type(6n + 6) {
+  --channels-default: var(--chad-thread-6);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) ul[class^="content_"] > li[class^="container_"] > ul[role="group"] > li:only-of-type {
+  --channels-default: var(--chad-thread-single);
+}
+
+/* Renderer transparency. Select a native backdrop in your desktop client.
+   Apply tint to sibling panes and clear only ancestor paint layers. */
+:is(html, body):is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled),
+html:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled) > body,
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled) #app-mount {
+  background-color: transparent;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.app_YRXZu0, .app_QbT-Jy, .app__160d8, .app_b1f720),
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.bg_Fd0FEH, .bg__960e4),
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebar_pog62O, .sidebar_c48ade),
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebar_pog62O, .sidebar_c48ade)::after {
+  background: transparent;
+}
+
+/* Discord's guild navigation paints its full-height background from this fallback. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) > nav:has(> #channels) {
+  --background-base-lowest: transparent;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) {
+  background-color: var(--chad-sidebar-paint);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.themed_ybUK7Z, .themed__9293f) {
+  --__header-bar-background: var(--chad-sidebar-paint);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.container_86es0b, .container_c8ffbb, .membersWrap_86es0b:not(.container_86es0b *), .membersWrap_c8ffbb:not(.container_c8ffbb *)) {
+  background-color: var(--chad-sidebar-paint);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0),
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chatContent_z_gUBg, .chatContent_f75fb0),
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.container_zrUwGA, .container__133bf) {
+  background: color-mix(in srgb, var(--chad-canvas) calc(var(--chad-window-opacity) * 100%), transparent);
+}
+
+/* The message canvas and the member roster are siblings in a normal chat.
+   Keep their common background clear so the two tints never stack. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)) {
+  background: transparent;
+}
+
+/* Theme uniformity optimisations. Share the title bar's rail fill at the pane
+   corners and below the account controls. Each surface paints one tint. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount {
+  --chad-rail-paint: color-mix(in srgb, var(--chad-rail) calc(var(--chad-window-opacity) * 100%), transparent);
+  --chad-sidebar-paint: color-mix(in srgb, var(--chad-sidebar) calc(var(--chad-window-opacity) * 100%), transparent);
+  --chad-canvas-paint: color-mix(in srgb, var(--chad-canvas) calc(var(--chad-window-opacity) * 100%), transparent);
+  --chad-inline-start: left;
+  --chad-inline-end: right;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:dir(rtl) {
+  --chad-inline-start: right;
+  --chad-inline-end: left;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.wrapper_5dqHTG, .wrapper_ef3116),
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.bar_3zSH5d, .bar_c38106) {
+  background-color: var(--chad-rail-paint);
+}
+
+/* The guild scroller fades near the account card. Paint its fixed-width
+   column on the shell so the tint continues through the fade and footer. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebar_pog62O, .sidebar_c48ade):has(:is(.wrapper_5dqHTG, .wrapper_ef3116)) {
+  background: linear-gradient(var(--chad-rail-paint), var(--chad-rail-paint)) var(--chad-inline-start) top / var(--custom-guild-list-width) 100% no-repeat;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebar_pog62O, .sidebar_c48ade):has(:is(.wrapper_5dqHTG, .wrapper_ef3116)) :is(.wrapper_5dqHTG, .wrapper_ef3116),
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebar_pog62O, .sidebar_c48ade):has(:is(.wrapper_5dqHTG, .wrapper_ef3116))::after {
+  background: transparent;
+}
+
+/* Keep server banner paint inside the curve, with controls outside it. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) :is([class^="bannerImage_"], [class*=" bannerImage_"]) {
+  border-start-start-radius: var(--chad-pane-radius);
+  border-start-end-radius: var(--chad-pane-radius);
+  overflow: hidden;
+}
+
+/* The background tiles round the visible frame and leave room for the rail
+   tint outside its contour. The boxes still follow Discord's layout. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade) {
+  background: radial-gradient(circle at var(--chad-inline-end) bottom,
+    var(--chad-sidebar-paint) calc(var(--chad-pane-radius) - 1.25px),
+    var(--chad-pane-border) calc(var(--chad-pane-radius) - 0.75px) calc(var(--chad-pane-radius) - 0.25px),
+    var(--chad-rail-paint) calc(var(--chad-pane-radius) + 0.25px)) var(--chad-inline-start) top / var(--chad-pane-radius) var(--chad-pane-radius) no-repeat,
+  radial-gradient(circle at var(--chad-inline-start) bottom,
+    var(--chad-sidebar-paint) calc(var(--chad-pane-radius) - 1.25px),
+    var(--chad-pane-border) calc(var(--chad-pane-radius) - 0.75px) calc(var(--chad-pane-radius) - 0.25px),
+    var(--chad-rail-paint) calc(var(--chad-pane-radius) + 0.25px)) var(--chad-inline-end) top / var(--chad-pane-radius) var(--chad-pane-radius) no-repeat,
+  radial-gradient(circle at var(--chad-inline-end) top,
+    var(--chad-sidebar-paint) calc(var(--chad-pane-radius) - 1.25px),
+    var(--chad-pane-border) calc(var(--chad-pane-radius) - 0.75px) calc(var(--chad-pane-radius) - 0.25px),
+    var(--chad-rail-paint) calc(var(--chad-pane-radius) + 0.25px)) var(--chad-inline-start) bottom / var(--chad-pane-radius) var(--chad-pane-radius) no-repeat,
+  radial-gradient(circle at var(--chad-inline-start) top,
+    var(--chad-sidebar-paint) calc(var(--chad-pane-radius) - 1.25px),
+    var(--chad-pane-border) calc(var(--chad-pane-radius) - 0.75px) calc(var(--chad-pane-radius) - 0.25px),
+    var(--chad-rail-paint) calc(var(--chad-pane-radius) + 0.25px)) var(--chad-inline-end) bottom / var(--chad-pane-radius) var(--chad-pane-radius) no-repeat,
+  linear-gradient(to bottom, var(--chad-pane-border) 1px, var(--chad-sidebar-paint) 1px) center top / calc(100% - var(--chad-pane-radius) * 2) var(--chad-pane-radius) no-repeat,
+  linear-gradient(to right, var(--chad-pane-border) 1px, var(--chad-sidebar-paint) 1px calc(100% - 1px), var(--chad-pane-border) calc(100% - 1px)) center center / 100% calc(100% - var(--chad-pane-radius) * 2) no-repeat,
+  linear-gradient(to top, var(--chad-pane-border) 1px, var(--chad-sidebar-paint) 1px) center bottom / calc(100% - var(--chad-pane-radius) * 2) var(--chad-pane-radius) no-repeat;
+  background-origin: border-box;
+  border-color: transparent;
+  border-radius: 0;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)):has(> :is(.themed_ybUK7Z, .themed__9293f), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f)) {
+  border-start-start-radius: 0;
+}
+
+/* The header tile already draws the top stroke. Drop the native duplicate. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)):has(> :is(.themed_ybUK7Z, .themed__9293f), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f))[data-has-border="true"] {
+  border-top-width: 0;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)):has(> :is(.themed_ybUK7Z, .themed__9293f), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f)) > :is(.themed_ybUK7Z, .themed__9293f),
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)):has(> :is(.themed_ybUK7Z, .themed__9293f), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f)) > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f) {
+  background: radial-gradient(circle at var(--chad-inline-end) bottom,
+    var(--chad-sidebar-paint) calc(var(--chad-pane-radius) - 1.25px),
+    var(--chad-pane-border) calc(var(--chad-pane-radius) - 0.75px) calc(var(--chad-pane-radius) - 0.25px),
+    var(--chad-rail-paint) calc(var(--chad-pane-radius) + 0.25px)) var(--chad-inline-start) top / var(--chad-pane-radius) var(--chad-pane-radius) no-repeat,
+  linear-gradient(to bottom, var(--chad-pane-border) 1px, var(--chad-sidebar-paint) 1px) var(--chad-inline-start) var(--chad-pane-radius) top 0 / calc(100% - var(--chad-pane-radius) - 1px) var(--chad-pane-radius) no-repeat,
+  linear-gradient(to top, var(--chad-pane-border) 1px, var(--chad-sidebar-paint) 1px) center bottom / calc(100% - 2px) calc(100% - var(--chad-pane-radius)) no-repeat,
+  linear-gradient(var(--chad-pane-border), var(--chad-pane-border)) var(--chad-inline-start) bottom / 1px calc(100% - var(--chad-pane-radius)) no-repeat,
+  linear-gradient(var(--chad-pane-border), var(--chad-pane-border)) var(--chad-inline-end) top / 1px 100% no-repeat;
+  background-origin: border-box;
+  border-color: transparent;
+}
+
+/* Only the perimeter rounds. The chat-to-roster divider stays square. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)):has(> :is(.themed_ybUK7Z, .themed__9293f), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f)) :is(.chatContent_z_gUBg, .chatContent_f75fb0) {
+  background: radial-gradient(circle at var(--chad-inline-end) top,
+    var(--chad-canvas-paint) calc(var(--chad-pane-radius) - 1.25px),
+    var(--chad-pane-border) calc(var(--chad-pane-radius) - 0.75px) calc(var(--chad-pane-radius) - 0.25px),
+    var(--chad-rail-paint) calc(var(--chad-pane-radius) + 0.25px)) var(--chad-inline-start) bottom / var(--chad-pane-radius) var(--chad-pane-radius) no-repeat,
+  radial-gradient(circle at var(--chad-inline-start) top,
+    var(--chad-canvas-paint) calc(var(--chad-pane-radius) - 1.25px),
+    var(--chad-pane-border) calc(var(--chad-pane-radius) - 0.75px) calc(var(--chad-pane-radius) - 0.25px),
+    var(--chad-rail-paint) calc(var(--chad-pane-radius) + 0.25px)) var(--chad-inline-end) bottom / var(--chad-pane-radius) var(--chad-pane-radius) no-repeat,
+  linear-gradient(to top, var(--chad-pane-border) 1px, var(--chad-canvas-paint) 1px) var(--chad-inline-start) var(--chad-pane-radius) bottom 0 / calc(100% - var(--chad-pane-radius) - var(--chad-pane-radius)) var(--chad-pane-radius) no-repeat,
+  linear-gradient(var(--chad-pane-border), var(--chad-pane-border)) center top / 100% 1px no-repeat,
+  linear-gradient(to right, var(--chad-pane-border) 1px, var(--chad-canvas-paint) 1px calc(100% - 1px), var(--chad-pane-border) calc(100% - 1px)) left 0 top 1px / 100% calc(100% - var(--chad-pane-radius) - 1px) no-repeat;
+  background-origin: border-box;
+  box-shadow: none;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)):has(> :is(.themed_ybUK7Z, .themed__9293f), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f)) :is(.chatContent_z_gUBg, .chatContent_f75fb0):has(~ :is(.container_86es0b, .container_c8ffbb, .membersWrap_86es0b:not(.container_86es0b *), .membersWrap_c8ffbb:not(.container_c8ffbb *)):not([hidden], [aria-hidden="true"])) {
+  background: radial-gradient(circle at var(--chad-inline-end) top,
+    var(--chad-canvas-paint) calc(var(--chad-pane-radius) - 1.25px),
+    var(--chad-pane-border) calc(var(--chad-pane-radius) - 0.75px) calc(var(--chad-pane-radius) - 0.25px),
+    var(--chad-rail-paint) calc(var(--chad-pane-radius) + 0.25px)) var(--chad-inline-start) bottom / var(--chad-pane-radius) var(--chad-pane-radius) no-repeat,
+  linear-gradient(var(--chad-pane-border), var(--chad-pane-border)) var(--chad-inline-end) bottom / 1px var(--chad-pane-radius) no-repeat,
+  linear-gradient(to top, var(--chad-pane-border) 1px, var(--chad-canvas-paint) 1px) var(--chad-inline-start) var(--chad-pane-radius) bottom 0 / calc(100% - var(--chad-pane-radius) - 1px) var(--chad-pane-radius) no-repeat,
+  linear-gradient(var(--chad-pane-border), var(--chad-pane-border)) center top / 100% 1px no-repeat,
+  linear-gradient(to right, var(--chad-pane-border) 1px, var(--chad-canvas-paint) 1px calc(100% - 1px), var(--chad-pane-border) calc(100% - 1px)) left 0 top 1px / 100% calc(100% - var(--chad-pane-radius) - 1px) no-repeat;
+  background-origin: border-box;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)):has(> :is(.themed_ybUK7Z, .themed__9293f), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f)) :is(.chatContent_z_gUBg, .chatContent_f75fb0) ~ :is(.container_86es0b, .container_c8ffbb, .membersWrap_86es0b:not(.container_86es0b *), .membersWrap_c8ffbb:not(.container_c8ffbb *)):not([hidden], [aria-hidden="true"]) {
+  background: linear-gradient(var(--chad-pane-border), var(--chad-pane-border)) var(--chad-inline-start) bottom / 1px var(--chad-pane-radius) no-repeat,
+  radial-gradient(circle at var(--chad-inline-start) top,
+    var(--chad-sidebar-paint) calc(var(--chad-pane-radius) - 1.25px),
+    var(--chad-pane-border) calc(var(--chad-pane-radius) - 0.75px) calc(var(--chad-pane-radius) - 0.25px),
+    var(--chad-rail-paint) calc(var(--chad-pane-radius) + 0.25px)) var(--chad-inline-end) bottom / var(--chad-pane-radius) var(--chad-pane-radius) no-repeat,
+  linear-gradient(to top, var(--chad-pane-border) 1px, var(--chad-sidebar-paint) 1px) var(--chad-inline-start) 1px bottom 0 / calc(100% - 1px - var(--chad-pane-radius)) var(--chad-pane-radius) no-repeat,
+  linear-gradient(var(--chad-pane-border), var(--chad-pane-border)) center top / 100% 1px no-repeat,
+  linear-gradient(to right, var(--chad-pane-border) 1px, var(--chad-sidebar-paint) 1px calc(100% - 1px), var(--chad-pane-border) calc(100% - 1px)) left 0 top 1px / 100% calc(100% - var(--chad-pane-radius) - 1px) no-repeat;
+  background-origin: border-box;
+  border-color: transparent;
+}
+}

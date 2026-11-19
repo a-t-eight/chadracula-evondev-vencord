@@ -1,0 +1,198 @@
+{
+  "format": "chadracula-release",
+  "version": 1,
+  "themes": [
+    {
+      "name": "chadracula-nord-blue-glass-framed-teal",
+      "accent": "nord_blue",
+      "accentColor": "#05C3FF",
+      "window": "glass",
+      "layout": "framed",
+      "mutedColor": "#ADB9DF",
+      "styles": {
+        "file": "chadracula-nord-blue-glass-framed-teal.theme.css",
+        "sha256": "02c444ea41a56bac216a9a109c698c9dc6ae5f975ccb3b9274451fcaa9604327"
+      },
+      "configuration": {
+        "file": "chadracula-nord-blue-glass-framed-teal.json",
+        "sha256": "99a38d4e2aa8f06f9ca6f4e474f2743506023fbdb317a604c379b048d2d19ea5"
+      }
+    },
+    {
+      "name": "chadracula-nord-blue-glass-flat-teal",
+      "accent": "nord_blue",
+      "accentColor": "#05C3FF",
+      "window": "glass",
+      "layout": "flat",
+      "mutedColor": "#ADB9DF",
+      "styles": {
+        "file": "chadracula-nord-blue-glass-flat-teal.theme.css",
+        "sha256": "f8e06d59bdafbdee058eb8e547056bae11836ca46cf8e35b705a96d7724e36a3"
+      },
+      "configuration": {
+        "file": "chadracula-nord-blue-glass-flat-teal.json",
+        "sha256": "b479ed60b9c7df0f5e713d1c9ce716cd7001b184c65daad52b9f966531599d10"
+      }
+    },
+    {
+      "name": "chadracula-nord-blue-solid-framed-teal",
+      "accent": "nord_blue",
+      "accentColor": "#05C3FF",
+      "window": "solid",
+      "layout": "framed",
+      "mutedColor": "#92A2D4",
+      "styles": {
+        "file": "chadracula-nord-blue-solid-framed-teal.theme.css",
+        "sha256": "d4ea19b9865bdc33980073744e3a63f702c306d410a1f35c3652b88d83b97a32"
+      },
+      "configuration": {
+        "file": "chadracula-nord-blue-solid-framed-teal.json",
+        "sha256": "75c27a908ba1aac6113fc22c29d1c15adae61d6eb23a44e030ad2f06c83d3a07"
+      }
+    },
+    {
+      "name": "chadracula-nord-blue-solid-flat-teal",
+      "accent": "nord_blue",
+      "accentColor": "#05C3FF",
+      "window": "solid",
+      "layout": "flat",
+      "mutedColor": "#92A2D4",
+      "styles": {
+        "file": "chadracula-nord-blue-solid-flat-teal.theme.css",
+        "sha256": "a1c7678d6c68188d342aba8761435b67f22b4c284cbb118ee528223f20d69f28"
+      },
+      "configuration": {
+        "file": "chadracula-nord-blue-solid-flat-teal.json",
+        "sha256": "e7a6f82a6bcefa58cfa8489add97ca124214ec4c7ecb27d8bd24d032efa28765"
+      }
+    },
+    {
+      "name": "chadracula-pink-glass-framed-teal",
+      "accent": "pink",
+      "accentColor": "#FF6BCB",
+      "window": "glass",
+      "layout": "framed",
+      "mutedColor": "#ADB9DF",
+      "styles": {
+        "file": "chadracula-pink-glass-framed-teal.theme.css",
+        "sha256": "8ed1e7f36929cbbf4abdd05fc24cd489771a4d051da0621abf03d28b53ca9c71"
+      },
+      "configuration": {
+        "file": "chadracula-pink-glass-framed-teal.json",
+        "sha256": "ac5bd088eb5ad4cfb378f8ee988dd598cb0aedf112b31887da05ccdb80da9570"
+      }
+    },
+    {
+      "name": "chadracula-pink-glass-flat-teal",
+      "accent": "pink",
+      "accentColor": "#FF6BCB",
+      "window": "glass",
+      "layout": "flat",
+      "mutedColor": "#ADB9DF",
+      "styles": {
+        "file": "chadracula-pink-glass-flat-teal.theme.css",
+        "sha256": "7db8c83886504c9d1c19291dc1ed8424bc7c2b7f9579033ff60e33f2de06dd7f"
+      },
+      "configuration": {
+        "file": "chadracula-pink-glass-flat-teal.json",
+        "sha256": "69d9e30e31cff49b7926ab68b45980e188161c4cae651868cd1307ce5da67b8c"
+      }
+    },
+    {
+      "name": "chadracula-pink-solid-framed-teal",
+      "accent": "pink",
+      "accentColor": "#FF6BCB",
+      "window": "solid",
+      "layout": "framed",
+      "mutedColor": "#92A2D4",
+      "styles": {
+        "file": "chadracula-pink-solid-framed-teal.theme.css",
+        "sha256": "781cefd57ee2840cef5270aa222afdb563f53cca2363299138907734227bcc2f"
+      },
+      "configuration": {
+        "file": "chadracula-pink-solid-framed-teal.json",
+        "sha256": "2ce81cd0e1709de3bec06fcbc620bc443dbff9dce622c7e1298a10becaee797b"
+      }
+    },
+    {
+      "name": "chadracula-pink-solid-flat-teal",
+      "accent": "pink",
+      "accentColor": "#FF6BCB",
+      "window": "solid",
+      "layout": "flat",
+      "mutedColor": "#92A2D4",
+      "styles": {
+        "file": "chadracula-pink-solid-flat-teal.theme.css",
+        "sha256": "359c7d91ff7d0dc7c6eefd3323a65344abf5e7900039cecaddc70976addb1d7f"
+      },
+      "configuration": {
+        "file": "chadracula-pink-solid-flat-teal.json",
+        "sha256": "3f4a67a9dfe1c7ba567fc363160e42f0993218d558c9c3a57343c68ef8ac6854"
+      }
+    },
+    {
+      "name": "chadracula-violet-glass-framed-teal",
+      "accent": "violet",
+      "accentColor": "#9A86FD",
+      "window": "glass",
+      "layout": "framed",
+      "mutedColor": "#ADB9DF",
+      "styles": {
+        "file": "chadracula-violet-glass-framed-teal.theme.css",
+        "sha256": "499aed8fd99fc9e80f3f977ba3fd076619b7a909b2716a2b39b9dc3310deab6f"
+      },
+      "configuration": {
+        "file": "chadracula-violet-glass-framed-teal.json",
+        "sha256": "45c188eed00869690d35d2d512bca1eafa9f6c38938b12c418dc8c7b48190741"
+      }
+    },
+    {
+      "name": "chadracula-violet-glass-flat-teal",
+      "accent": "violet",
+      "accentColor": "#9A86FD",
+      "window": "glass",
+      "layout": "flat",
+      "mutedColor": "#ADB9DF",
+      "styles": {
+        "file": "chadracula-violet-glass-flat-teal.theme.css",
+        "sha256": "90326492019cf0eda9cb2a498eb352db14620557669f0d65e99a8399746e9c74"
+      },
+      "configuration": {
+        "file": "chadracula-violet-glass-flat-teal.json",
+        "sha256": "c91c09bc14917584a80513c996124a1b54854c7562fdc77d8f0ad590044c458f"
+      }
+    },
+    {
+      "name": "chadracula-violet-solid-framed-teal",
+      "accent": "violet",
+      "accentColor": "#9A86FD",
+      "window": "solid",
+      "layout": "framed",
+      "mutedColor": "#92A2D4",
+      "styles": {
+        "file": "chadracula-violet-solid-framed-teal.theme.css",
+        "sha256": "7978fdd72b1b83745d9abc714dbb273372e8f19d5aa1ceec407d1434013ca3a0"
+      },
+      "configuration": {
+        "file": "chadracula-violet-solid-framed-teal.json",
+        "sha256": "23c77f262fefb85a75a16e4a802ff88f9cdaa64d2897d40bf9d708557602be18"
+      }
+    },
+    {
+      "name": "chadracula-violet-solid-flat-teal",
+      "accent": "violet",
+      "accentColor": "#9A86FD",
+      "window": "solid",
+      "layout": "flat",
+      "mutedColor": "#92A2D4",
+      "styles": {
+        "file": "chadracula-violet-solid-flat-teal.theme.css",
+        "sha256": "675c41e78c7ca2fcc4453d28e6ceef735423acfabe441307a38989c638436e00"
+      },
+      "configuration": {
+        "file": "chadracula-violet-solid-flat-teal.json",
+        "sha256": "e86e915bc267911b6bc14160713b2e279210c22351b3c393800ed969fd88c273"
+      }
+    }
+  ]
+}

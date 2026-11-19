@@ -1,0 +1,20 @@
+{
+  "format": "chadracula-studio",
+  "version": 1,
+  "config": {
+    "accent": "violet",
+    "text": "warm",
+    "layout": "flat",
+    "window": "glass",
+    "opacity": 80,
+    "threads": "rainbow",
+    "link": "palette:pink",
+    "selection": "tinted",
+    "mention": "palette:baby_pink",
+    "surfaces": {
+      "sidebar": "palette:black",
+      "rail": "palette:darker_black",
+      "input": "palette:black"
+    }
+  }
+}

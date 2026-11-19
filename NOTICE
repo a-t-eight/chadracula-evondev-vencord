@@ -1,0 +1,18 @@
+Chadracula-Evondev for Discord
+Copyright 2026 a-t-eight
+
+The original Discord port and Chadracula Studio are licensed under
+Apache-2.0. See LICENSE.
+
+The Base30 and Base16 palette definitions are from Chadracula-Evondev
+in NvChad Base46 at revision 267954c8663607823f03a3259bb8deb15688212f.
+The palette source and Base46's original license notice are included
+in notices/. Generated stylesheets carry the Base46 notice as well.
+
+BrunoKrugel contributed Chadracula-Evondev to NvChad Base46:
+https://github.com/NvChad/base46/pull/242
+
+The upstream palette credits Evondev Dracula for Visual Studio Code
+by evondev. That theme credits Dracula Official.
+https://github.com/evondev/evondev-dracula
+https://draculatheme.com/

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Chadracula Studio · Discord theme builder</title>
+  <link rel="stylesheet" href="builder.css">
+  <script defer src="theme.js"></script>
+  <script defer src="presets.js"></script>
+  <script defer src="accent-editor.js"></script>
+  <script defer src="builder.js"></script>
+</head>
+<body>
+  <header class="studio-header">
+    <div class="studio-brand">
+      <span class="studio-mark" aria-hidden="true"></span>
+      <div>
+        <h1>Chadracula Studio</h1>
+        <p>Discord theme builder</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="button" id="import-config" type="button">Import config</button>
+      <button class="button" id="save-config" type="button">Save config</button>
+      <button class="button primary" id="download-css" type="button"><span class="download-mark" aria-hidden="true">↓</span> Download CSS</button>
+      <input id="config-file" type="file" accept=".json,application/json" hidden>
+    </div>
+    <p id="status" class="studio-status" role="status"></p>
+  </header>
+
+  <main class="studio-workspace">
+    <aside class="editor" id="controls" aria-label="Theme controls" tabindex="-1">
+      <a class="button mobile-jump" aria-label="Jump to preview" href="#preview">Jump to preview ↓</a>
+      <section aria-labelledby="presets-heading">
+        <h2 id="presets-heading">Starting points</h2>
+        <p class="subtle section-note">Choose a preset, then fine-tune its roles.</p>
+        <div id="presets" class="preset-grid"></div>
+      </section>
+
+      <section class="appearance" aria-labelledby="appearance-heading">
+        <h2 id="appearance-heading">Appearance</h2>
+        <form id="appearance">
+          <div id="accent-editor">
+            <div class="form-row accent-preset-row">
+              <label for="accent">Accent preset</label>
+              <div class="accent-preset-control">
+                <select id="accent" name="accent" data-color-preset></select>
+                <span class="accent-swatch" data-accent-swatch aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="form-row">
+              <label for="accent-format">Color format</label>
+              <select id="accent-format" data-accent-format>
+                <option value="hex">Hex</option>
+                <option value="rgb">RGB</option>
+                <option value="hsv">HSV</option>
+              </select>
+            </div>
+            <div class="accent-fields" data-accent-fields></div>
+          </div>
+          <div class="color-role-editor" id="text-editor"></div>
+          <div class="form-row"><label for="layout">Pane layout</label><select id="layout" name="layout"></select></div>
+          <div class="form-row"><label for="window">Window</label><select id="window" name="window"></select></div>
+          <div class="opacity-row" id="opacity-row" hidden>
+            <label for="opacity">Window opacity</label><output id="opacity-value" for="opacity"></output>
+            <input id="opacity" name="opacity" type="range" min="75" max="100" step="1" aria-describedby="material-note">
+            <p class="subtle" id="material-note">Simulated backdrop. Your client controls the native window material.</p>
+          </div>
+          <hr>
+          <div id="interaction-colors"></div>
+          <details class="advanced" id="advanced">
+            <summary>Surfaces and foregrounds</summary>
+            <p class="subtle">Preview and export use contrast-adjusted colors when needed. The palette shows the resolved values.</p>
+            <div id="role-colors"></div>
+            <button class="link-button" id="reset-colors" type="button">Reset surface and foreground overrides</button>
+          </details>
+        </form>
+      </section>
+    </aside>
+
+    <section class="preview-workspace" id="preview" aria-labelledby="preview-heading" tabindex="-1">
+      <header class="preview-heading">
+        <div>
+          <h2 id="preview-heading">Discord preview</h2>
+          <p class="subtle">Sample server · Synthetic content</p>
+        </div>
+        <div class="preview-actions">
+          <button class="button" id="inspect" type="button" aria-pressed="false">Inspect</button>
+          <button class="button" id="save-baseline" type="button">Save as A</button>
+          <button class="button" id="compare" type="button" aria-pressed="false" disabled>Compare</button>
+        </div>
+      </header>
+      <a class="mobile-control-link" href="#controls">Back to controls ↑</a>
+      <p class="inspect-note" id="inspect-note" hidden>Choose a highlighted element to jump to its control.</p>
+      <div class="preview-grid" id="preview-grid"></div>
+
+      <div class="role-strip">
+        <dl class="current-colors" id="current-colors" aria-label="Resolved preview colors"></dl>
+        <button class="button" type="button" id="show-palette">Inspect palette</button>
+      </div>
+      <p class="subtle storage-note" id="storage-note">Draft saved in this browser.</p>
+      <noscript><p>This editor needs JavaScript to update the preview and export a stylesheet.</p></noscript>
+    </section>
+  </main>
+
+  <dialog id="palette" aria-labelledby="palette-heading">
+    <header class="palette-header">
+      <div>
+        <h2 id="palette-heading">Theme palette</h2>
+        <p class="subtle">Resolved roles and the complete Base46 source palette.</p>
+      </div>
+      <form method="dialog">
+        <button class="button" type="submit">Close palette</button>
+      </form>
+    </header>
+    <p class="palette-copy-message" id="palette-copy-message" role="status">Select a swatch to copy its value.</p>
+    <div id="palette-colors"></div>
+  </dialog>
+</body>
+</html>
