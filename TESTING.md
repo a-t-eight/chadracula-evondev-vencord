@@ -1,6 +1,6 @@
 # Testing Chadracula-Evondev 1.0.1
 
-This report covers the 12 Nord Blue, Pink and Violet variants listed in the [release manifest](themes/manifest.json). Each accent was tested in Flat and Framed, with Solid and 80% Glass. The manifest SHA-256 is `78246156b05fe1f63258fb1924c4db8e9ab19b68ae30ea5ba027f276a14c87a8`.
+The desktop and native material results below cover the 12 variants tagged `v1.0.1`. Nord Blue, Pink and Violet were each tested in Flat and Framed, with Solid and 80% Glass. The tagged manifest SHA-256 is `78246156b05fe1f63258fb1924c4db8e9ab19b68ae30ea5ba027f276a14c87a8`.
 
 ## Desktop coverage
 
@@ -64,3 +64,19 @@ An isolated smoke test paired OpenAsar `nightly-5a44615` with Vencord `e75ac9a`.
 ## Offline Studio
 
 A fresh extraction rebuilt all generated files byte for byte. **16 Node tests and 11 Chromium checks passed**, including exact CSS and JSON downloads after importing every variant at 1280 px and 320 px, reload persistence, the two reusable Glass templates, keyboard and custom color controls, and synthetic renderer paint. See [Rebuild and verify](README.md#rebuild-and-verify) to rerun the checks.
+
+## Renderer fixes after v1.0.1
+
+This follow-up covers the existing fixed-accent Studio exports and the standalone appearance switcher. The fixed-accent exports apply to Discord’s dark appearances.
+
+The fixed variants and appearance switcher use Chadracula’s raised surface for normal Discord and Vencord settings cards. Chromium fixtures check that the warning card retains its feedback fill and the fixed variants leave native Light cards unchanged.
+
+Framed pixel checks cover guild and direct-message chat, Friends, and adjacent pages. They compare the fill outside both upper arcs with the title bar, check the frame stroke over black and white backdrops, and test that a popout beyond the main pane remains interactive.
+
+Flat pixel checks cover Friends and Quests in Solid and Glass. They check the outer corner fills, the rules above the Home content and beneath the DM search, and the retained DM group divider and Quest artwork. The guild fixture also checks the outer main corner and the shared top stroke.
+
+### Native follow-up on macOS
+
+In Vesktop, Framed Solid and Glass matched the title-bar fill outside both upper corners of Friends and the upper-right corner of guild chat. Flat Solid and Glass rounded the outside corners in Friends and Quests and the upper-right corner in guild chat. Quests cleared the rules below DM search and above the main pane, while both guild header dividers remained visible. Over a light desktop, the fill sampled outside each Flat Glass Home corner matched the title bar exactly.
+
+With the appearance switcher enabled, the Vencord Plugins page showed the themed dark cards in Discord Light and Dark in both Vesktop and Discord desktop.

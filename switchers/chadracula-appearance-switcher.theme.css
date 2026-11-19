@@ -48,11 +48,11 @@
    Light selects the Nord Blue dark palette. Onyx and legacy AMOLED select Violet.
    Source exports
    chadracula-nord-blue-glass-framed-teal.theme.css
-   SHA-256 02c444ea41a56bac216a9a109c698c9dc6ae5f975ccb3b9274451fcaa9604327
+   SHA-256 b3396041f0167e6b562212e8582309140863ef17f0ec6c087d246f7a060a5d56
    chadracula-pink-glass-framed-teal.theme.css
-   SHA-256 8ed1e7f36929cbbf4abdd05fc24cd489771a4d051da0621abf03d28b53ca9c71
+   SHA-256 077624fdeb1e3c85a4dda238646d51a1de17530305b042021c208bfa04c4e065
    chadracula-violet-glass-framed-teal.theme.css
-   SHA-256 499aed8fd99fc9e80f3f977ba3fd076619b7a909b2716a2b39b9dc3310deab6f
+   SHA-256 fa9dc059eb9e9d4eff99b495d62975beff081e17566cb682d4f0e8caeb2a2bfd
 */
 
 @media not (forced-colors: active) {
@@ -220,6 +220,7 @@
   --modal-background: var(--chad-raised);
   --modal-footer-background: var(--chad-raised);
   --autocomplete-bg: var(--chad-raised);
+  --card-background-default: var(--chad-raised);
   --app-frame-border: var(--chad-border);
   --border-faint: var(--chad-border);
   --border-muted: var(--chad-border);
@@ -638,27 +639,46 @@ html:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled) > bo
   border-radius: 0;
 }
 
-:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)):has(> :is(.themed_ybUK7Z, .themed__9293f), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f)) {
+:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(:is(.chat_z_gUBg, .chat_f75fb0), :is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)) {
   border-start-start-radius: 0;
+  border-start-end-radius: 0;
 }
 
 /* The header tile already draws the top stroke. Drop the native duplicate. */
-:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)):has(> :is(.themed_ybUK7Z, .themed__9293f), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f))[data-has-border="true"] {
+:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(:is(.chat_z_gUBg, .chat_f75fb0), :is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T))[data-has-border="true"],
+:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(:is(.chat_z_gUBg, .chat_f75fb0), :is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)):not(:is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0))) {
   border-top-width: 0;
 }
 
-:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)):has(> :is(.themed_ybUK7Z, .themed__9293f), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f)) > :is(.themed_ybUK7Z, .themed__9293f),
-:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)):has(> :is(.themed_ybUK7Z, .themed__9293f), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f)) > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f) {
+:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(:is(.chat_z_gUBg, .chat_f75fb0), :is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T),
+:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(:is(.chat_z_gUBg, .chat_f75fb0), :is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)) > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T) {
   background: radial-gradient(circle at var(--chad-inline-end) bottom,
     var(--chad-sidebar-paint) calc(var(--chad-pane-radius) - 1.25px),
     var(--chad-pane-border) calc(var(--chad-pane-radius) - 0.75px) calc(var(--chad-pane-radius) - 0.25px),
     var(--chad-rail-paint) calc(var(--chad-pane-radius) + 0.25px)) var(--chad-inline-start) top / var(--chad-pane-radius) var(--chad-pane-radius) no-repeat,
-  linear-gradient(to bottom, var(--chad-pane-border) 1px, var(--chad-sidebar-paint) 1px) var(--chad-inline-start) var(--chad-pane-radius) top 0 / calc(100% - var(--chad-pane-radius) - 1px) var(--chad-pane-radius) no-repeat,
+  radial-gradient(circle at var(--chad-inline-start) bottom,
+    var(--chad-sidebar-paint) calc(var(--chad-pane-radius) - 1.25px),
+    var(--chad-pane-border) calc(var(--chad-pane-radius) - 0.75px) calc(var(--chad-pane-radius) - 0.25px),
+    var(--chad-rail-paint) calc(var(--chad-pane-radius) + 0.25px)) var(--chad-inline-end) top / var(--chad-pane-radius) var(--chad-pane-radius) no-repeat,
+  linear-gradient(to bottom, var(--chad-pane-border) 1px, var(--chad-sidebar-paint) 1px) center top / calc(100% - var(--chad-pane-radius) * 2) var(--chad-pane-radius) no-repeat,
   linear-gradient(to top, var(--chad-pane-border) 1px, var(--chad-sidebar-paint) 1px) center bottom / calc(100% - 2px) calc(100% - var(--chad-pane-radius)) no-repeat,
   linear-gradient(var(--chad-pane-border), var(--chad-pane-border)) var(--chad-inline-start) bottom / 1px calc(100% - var(--chad-pane-radius)) no-repeat,
-  linear-gradient(var(--chad-pane-border), var(--chad-pane-border)) var(--chad-inline-end) top / 1px 100% no-repeat;
+  linear-gradient(var(--chad-pane-border), var(--chad-pane-border)) var(--chad-inline-end) bottom / 1px calc(100% - var(--chad-pane-radius)) no-repeat;
   background-origin: border-box;
   border-color: transparent;
+}
+
+/* Paint the header and page body independently so Glass applies one tint. */
+:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(:is(.chat_z_gUBg, .chat_f75fb0), :is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)):not(:is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0))) {
+  background: transparent;
+}
+
+:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(:is(.chat_z_gUBg, .chat_f75fb0), :is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)):not(:is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0))) > :is(:is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0)) + :not(:is([role="dialog"], [role="alertdialog"], [role="menu"])) {
+  background-color: var(--chad-canvas-paint);
+}
+
+:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.container_zrUwGA, .container__133bf) > :is(.tabBody_zrUwGA, .tabBody__133bf) > :is(.nowPlayingColumn_zrUwGA, .nowPlayingColumn__133bf) {
+  background: transparent;
 }
 
 /* Only the perimeter rounds. The chat-to-roster divider stays square. */

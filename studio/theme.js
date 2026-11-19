@@ -390,7 +390,7 @@
     canvas: "background-base-lower background-primary bg-base-primary",
     sidebar: "background-base-low background-secondary bg-base-secondary channel-background-default custom-channel-members-bg",
     input: "chat-background-default channeltextarea-background input-background input-background-default background-code card-secondary-bg",
-    raised: "background-surface-high background-surface-higher background-surface-highest background-floating background-nested-floating background-accent background-secondary-alt bg-surface-overlay bg-surface-raised card-primary-bg modal-background modal-footer-background autocomplete-bg",
+    raised: "background-surface-high background-surface-higher background-surface-highest background-floating background-nested-floating background-accent background-secondary-alt bg-surface-overlay bg-surface-raised card-primary-bg modal-background modal-footer-background autocomplete-bg card-background-default",
     border: "app-frame-border border-faint border-muted border-subtle border-normal",
     "control-border": "border-strong input-border input-border-default input-border-hover checkbox-border-default checkbox-border-hover scrollbar-auto-thumb scrollbar-thin-thumb scrollbar-auto-scrollbar-color-thumb control-primary-border-default control-primary-border-hover control-primary-border-active button-filled-brand-border",
     text: "text-default text-normal text-primary text-strong text-code header-primary interactive-active interactive-hover interactive-text-active interactive-text-hover interactive-icon-active interactive-icon-hover input-text-default input-text-error-default icon-strong control-critical-primary-text-default control-critical-primary-text-hover control-critical-primary-text-active control-critical-primary-icon-default control-critical-primary-icon-hover control-critical-primary-icon-active",
@@ -440,8 +440,18 @@
   const chatContent = ":is(.chatContent_z_gUBg, .chatContent_f75fb0)";
   const channelHeader = ":is(.themed_ybUK7Z, .themed__9293f)";
   const headerWrapper = ":is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0)";
+  const friends = ":is(.container_zrUwGA, .container__133bf)";
+  const friendsBody = ":is(.tabBody_zrUwGA, .tabBody__133bf)";
+  const friendsActivity = ":is(.nowPlayingColumn_zrUwGA, .nowPlayingColumn__133bf)";
+  const mainPage = ":is(.page_pog62O, .page__5e434)";
+  const mainHeader = `:is(${channelHeader}, .header_iar92T)`;
+  const mainOverlay = ':is([role="dialog"], [role="alertdialog"], [role="menu"])';
+  const mainRegion = `:is(${chat}, ${friends}, ${mainPage}, ${mainPage} > :not(${mainOverlay}))`;
+  const mainHead = `:is(${mainHeader}, ${headerWrapper})`;
   const splitChat = `${chat}:has(> ${chatContent}, > ${chatRow} ${chatContent})`;
   const framedChat = `${splitChat}:has(> ${channelHeader}, > ${headerWrapper} > ${channelHeader})`;
+  const framedMain = `${mainRegion}:has(> ${mainHeader}, > ${headerWrapper} > ${mainHeader})`;
+  const framedSinglePane = `${framedMain}:not(${splitChat})`;
   const privateList = ":is(.privateChannels_u88IQl, .privateChannels__35e86)";
   const memberPanel = ":is(.container_86es0b, .container_c8ffbb, .membersWrap_86es0b:not(.container_86es0b *), .membersWrap_c8ffbb:not(.container_c8ffbb *))";
   const joinedRoster = `${memberPanel}:not([hidden], [aria-hidden="true"])`;
@@ -673,11 +683,11 @@ ${view} ${splitChat} {
   const inlineStart = "var(--chad-inline-start)";
   const inlineEnd = "var(--chad-inline-end)";
 
-  function frameCorner(inline, block, oppositeInline, oppositeBlock, fill = sidebarPaint, radius = frameRadius, line = frameLine) {
+  function frameCorner(inline, block, oppositeInline, oppositeBlock, fill = sidebarPaint, radius = frameRadius, line = frameLine, position = `${inline} ${block}`) {
     return `radial-gradient(circle at ${oppositeInline} ${oppositeBlock},
     ${fill} calc(${radius} - 1.25px),
     ${line} calc(${radius} - 0.75px) calc(${radius} - 0.25px),
-    ${railPaint} calc(${radius} + 0.25px)) ${inline} ${block} / ${radius} ${radius} no-repeat`;
+    ${railPaint} calc(${radius} + 0.25px)) ${position} / ${radius} ${radius} no-repeat`;
   }
 
   const topStartCorner = frameCorner(inlineStart, "top", inlineEnd, "bottom");
@@ -704,8 +714,20 @@ ${view} ${splitChat} {
 
   const flatRailRadius = "10px";
   const flatTopSize = "var(--chad-flat-top-edge-size, 0px)";
+  const flatHeaderInset = "var(--chad-flat-header-inset, 0px)";
   const railLine = "var(--chad-border)";
   const flatRailSide = `linear-gradient(to ${inlineEnd}, ${railLine} 1px, ${sidebarPaint} 1px)`;
+
+  function flatTopPaint(inline, opposite, fill, line = fill, inset = "0px") {
+    const radius = flatRailRadius;
+    const corner = `${inline} 0 top calc(0px - ${inset})`;
+    return [
+      frameCorner(inline, "top", opposite, "bottom", fill, radius, line, corner),
+      `linear-gradient(${fill}, ${fill}) ${opposite} top / calc(100% - ${radius}) calc(${radius} - ${inset}) no-repeat`,
+      `linear-gradient(${fill}, ${fill}) center bottom / 100% calc(100% - ${radius} + ${inset}) no-repeat`,
+    ].join(",\n  ");
+  }
+
   const uniformityPaint = Object.freeze({
     sidebar: [
       topStartCorner, topEndCorner, bottomStartCorner(sidebarPaint), bottomEndCorner(sidebarPaint),
@@ -714,11 +736,11 @@ ${view} ${splitChat} {
       `${bottomEdge(sidebarPaint)} center bottom / ${middleBand} ${frameRadius} no-repeat`,
     ].join(",\n  "),
     header: [
-      topStartCorner,
-      `${topEdge} ${inlineStart} ${frameRadius} top 0 / calc(100% - ${frameRadius} - 1px) ${frameRadius} no-repeat`,
+      topStartCorner, topEndCorner,
+      `${topEdge} center top / ${middleBand} ${frameRadius} no-repeat`,
       `${bottomEdge(sidebarPaint)} center bottom / calc(100% - 2px) calc(100% - ${frameRadius}) no-repeat`,
       `${solidEdge} ${inlineStart} bottom / 1px calc(100% - ${frameRadius}) no-repeat`,
-      `${solidEdge} ${inlineEnd} top / 1px 100% no-repeat`,
+      `${solidEdge} ${inlineEnd} bottom / 1px calc(100% - ${frameRadius}) no-repeat`,
     ].join(",\n  "),
     chat: lowerPanelPaint(canvasPaint, true, true),
     chatWithRoster: lowerPanelPaint(canvasPaint, true, false),
@@ -776,6 +798,12 @@ ${glass ? "" : `\n${transparentGuildNavCSS}`}`;
     const borderedChat = `${chat}[data-has-border="true"]`;
     const guildWithBorderedChat = `${view}:has(${borderedChat} > ${chatContent}, ${borderedChat} > ${chatRow} ${chatContent})`;
     const guildChat = `${view}:has(${sidebarList} > nav:not([hidden]) > #channels) ${splitChat}`;
+    const activeDMList = `${privateList}:not([hidden], [aria-hidden="true"])`;
+    const homeSidebar = `${sidebarList}:has(> ${activeDMList}):not(${guildSidebar})`;
+    const homeView = `${view}:has(${sidebarList} > ${activeDMList}):not(:has(${sidebarList} > nav:not([hidden]) > #channels))`;
+    const homeSearch = ":is(.searchBar_u88IQl, .searchBar__35e86)";
+    const homeMain = `${homeView} :is(${friends}, ${mainPage} > :not(${mainOverlay}, ${chat})):has(> ${mainHeader}, > ${headerWrapper} > ${mainHeader})`;
+    const questHome = ".container_ZTJWQo";
     return `
 /* Theme uniformity. Join the rounded channel edge to the top rule. The
    top rule and both header dividers share the same stroke color. */
@@ -790,7 +818,10 @@ ${guildWithBorderedChat} ${guildSidebar} {
 }
 
 ${guildChat}[data-has-border="true"] {
-  border-top-color: ${railLine};
+  --chad-flat-header-inset: 1px;
+  border-top-color: transparent;
+  border-image: linear-gradient(to ${inlineEnd}, ${railLine} calc(100% - ${flatRailRadius}), ${railPaint} calc(100% - ${flatRailRadius})) 1 0 0 0 / 1px 0 0 0;
+  border-start-end-radius: 0;
 }
 
 ${view} ${guildSidebar} ${sidebarBanner} {
@@ -800,7 +831,49 @@ ${view} ${guildSidebar} ${sidebarBanner} {
 
 ${guildChat} > ${channelHeader},
 ${guildChat} > ${headerWrapper} > ${channelHeader} {
+  background: ${flatTopPaint(inlineEnd, inlineStart, sidebarPaint, railLine, flatHeaderInset)};
+  background-origin: border-box;
   border-bottom-color: ${railLine};
+}
+
+/* Home shows one rail-facing arc on the DM list and one outer arc on the page. */
+${view} ${homeSidebar} {
+  background: ${flatTopPaint(inlineStart, inlineEnd, sidebarPaint)};
+  background-origin: border-box;
+  border-image: none;
+}
+
+${view} ${homeSidebar} > ${privateList} > ${homeSearch} {
+  border-bottom-color: transparent;
+}
+
+${homeMain},
+${homeView} ${mainPage} > ${questHome} {
+  border-top-width: 0;
+  border-start-end-radius: 0;
+}
+
+${homeMain} {
+  background: transparent;
+}
+
+${homeMain} > ${mainHeader},
+${homeMain} > ${headerWrapper} > ${mainHeader} {
+  background: ${flatTopPaint(inlineEnd, inlineStart, sidebarPaint)};
+  background-origin: border-box;
+}
+
+${homeMain} > ${mainHead} + :not(${mainOverlay}) {
+  background-color: ${canvasPaint};
+}
+
+${homeView} ${friends} > ${friendsBody} > ${friendsActivity} {
+  background: transparent;
+}
+
+${homeView} ${mainPage} > ${questHome} {
+  background: ${flatTopPaint(inlineEnd, inlineStart, canvasPaint)};
+  background-origin: border-box;
 }
 `;
   }
@@ -822,20 +895,35 @@ ${view} ${sidebarList} {
   border-radius: 0;
 }
 
-${view} ${framedChat} {
+${view} ${framedMain} {
   border-start-start-radius: 0;
+  border-start-end-radius: 0;
 }
 
 /* The header tile already draws the top stroke. Drop the native duplicate. */
-${view} ${framedChat}[data-has-border="true"] {
+${view} ${framedMain}[data-has-border="true"],
+${view} ${framedSinglePane} {
   border-top-width: 0;
 }
 
-${view} ${framedChat} > ${channelHeader},
-${view} ${framedChat} > ${headerWrapper} > ${channelHeader} {
+${view} ${framedMain} > ${mainHeader},
+${view} ${framedMain} > ${headerWrapper} > ${mainHeader} {
   background: ${uniformityPaint.header};
   background-origin: border-box;
   border-color: transparent;
+}
+
+/* Paint the header and page body independently so Glass applies one tint. */
+${view} ${framedSinglePane} {
+  background: transparent;
+}
+
+${view} ${framedSinglePane} > ${mainHead} + :not(${mainOverlay}) {
+  background-color: ${canvasPaint};
+}
+
+${view} ${friends} > ${friendsBody} > ${friendsActivity} {
+  background: transparent;
 }
 
 /* Only the perimeter rounds. The chat-to-roster divider stays square. */

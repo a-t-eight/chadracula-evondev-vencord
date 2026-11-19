@@ -182,6 +182,7 @@
   --modal-background: var(--chad-raised);
   --modal-footer-background: var(--chad-raised);
   --autocomplete-bg: var(--chad-raised);
+  --card-background-default: var(--chad-raised);
   --app-frame-border: var(--chad-border);
   --border-faint: var(--chad-border);
   --border-muted: var(--chad-border);
@@ -557,7 +558,10 @@
 }
 
 :is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > nav:not([hidden]) > #channels) :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0))[data-has-border="true"] {
-  border-top-color: var(--chad-border);
+  --chad-flat-header-inset: 1px;
+  border-top-color: transparent;
+  border-image: linear-gradient(to var(--chad-inline-end), var(--chad-border) calc(100% - 10px), var(--chad-rail-paint) calc(100% - 10px)) 1 0 0 0 / 1px 0 0 0;
+  border-start-end-radius: 0;
 }
 
 :is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade):has(> nav:not([hidden]) > #channels) :is([class^="bannerImage_"], [class*=" bannerImage_"]) {
@@ -567,6 +571,68 @@
 
 :is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > nav:not([hidden]) > #channels) :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)) > :is(.themed_ybUK7Z, .themed__9293f),
 :is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > nav:not([hidden]) > #channels) :is(.chat_z_gUBg, .chat_f75fb0):has(> :is(.chatContent_z_gUBg, .chatContent_f75fb0), > :is(.content_z_gUBg, .content_f75fb0) :is(.chatContent_z_gUBg, .chatContent_f75fb0)) > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(.themed_ybUK7Z, .themed__9293f) {
+  background: radial-gradient(circle at var(--chad-inline-start) bottom,
+    var(--chad-sidebar-paint) calc(10px - 1.25px),
+    var(--chad-border) calc(10px - 0.75px) calc(10px - 0.25px),
+    var(--chad-rail-paint) calc(10px + 0.25px)) var(--chad-inline-end) 0 top calc(0px - var(--chad-flat-header-inset, 0px)) / 10px 10px no-repeat,
+  linear-gradient(var(--chad-sidebar-paint), var(--chad-sidebar-paint)) var(--chad-inline-start) top / calc(100% - 10px) calc(10px - var(--chad-flat-header-inset, 0px)) no-repeat,
+  linear-gradient(var(--chad-sidebar-paint), var(--chad-sidebar-paint)) center bottom / 100% calc(100% - 10px + var(--chad-flat-header-inset, 0px)) no-repeat;
+  background-origin: border-box;
   border-bottom-color: var(--chad-border);
+}
+
+/* Home shows one rail-facing arc on the DM list and one outer arc on the page. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade):has(> :is(.privateChannels_u88IQl, .privateChannels__35e86):not([hidden], [aria-hidden="true"])):not(:is(.sidebarList_pog62O, .sidebarList_c48ade):has(> nav:not([hidden]) > #channels)) {
+  background: radial-gradient(circle at var(--chad-inline-end) bottom,
+    var(--chad-sidebar-paint) calc(10px - 1.25px),
+    var(--chad-sidebar-paint) calc(10px - 0.75px) calc(10px - 0.25px),
+    var(--chad-rail-paint) calc(10px + 0.25px)) var(--chad-inline-start) 0 top calc(0px - 0px) / 10px 10px no-repeat,
+  linear-gradient(var(--chad-sidebar-paint), var(--chad-sidebar-paint)) var(--chad-inline-end) top / calc(100% - 10px) calc(10px - 0px) no-repeat,
+  linear-gradient(var(--chad-sidebar-paint), var(--chad-sidebar-paint)) center bottom / 100% calc(100% - 10px + 0px) no-repeat;
+  background-origin: border-box;
+  border-image: none;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebarList_pog62O, .sidebarList_c48ade):has(> :is(.privateChannels_u88IQl, .privateChannels__35e86):not([hidden], [aria-hidden="true"])):not(:is(.sidebarList_pog62O, .sidebarList_c48ade):has(> nav:not([hidden]) > #channels)) > :is(.privateChannels_u88IQl, .privateChannels__35e86) > :is(.searchBar_u88IQl, .searchBar__35e86) {
+  border-bottom-color: transparent;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > :is(.privateChannels_u88IQl, .privateChannels__35e86):not([hidden], [aria-hidden="true"])):not(:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > nav:not([hidden]) > #channels)) :is(:is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]), :is(.chat_z_gUBg, .chat_f75fb0))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)),
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > :is(.privateChannels_u88IQl, .privateChannels__35e86):not([hidden], [aria-hidden="true"])):not(:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > nav:not([hidden]) > #channels)) :is(.page_pog62O, .page__5e434) > .container_ZTJWQo {
+  border-top-width: 0;
+  border-start-end-radius: 0;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > :is(.privateChannels_u88IQl, .privateChannels__35e86):not([hidden], [aria-hidden="true"])):not(:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > nav:not([hidden]) > #channels)) :is(:is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]), :is(.chat_z_gUBg, .chat_f75fb0))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)) {
+  background: transparent;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > :is(.privateChannels_u88IQl, .privateChannels__35e86):not([hidden], [aria-hidden="true"])):not(:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > nav:not([hidden]) > #channels)) :is(:is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]), :is(.chat_z_gUBg, .chat_f75fb0))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T),
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > :is(.privateChannels_u88IQl, .privateChannels__35e86):not([hidden], [aria-hidden="true"])):not(:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > nav:not([hidden]) > #channels)) :is(:is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]), :is(.chat_z_gUBg, .chat_f75fb0))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)) > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T) {
+  background: radial-gradient(circle at var(--chad-inline-start) bottom,
+    var(--chad-sidebar-paint) calc(10px - 1.25px),
+    var(--chad-sidebar-paint) calc(10px - 0.75px) calc(10px - 0.25px),
+    var(--chad-rail-paint) calc(10px + 0.25px)) var(--chad-inline-end) 0 top calc(0px - 0px) / 10px 10px no-repeat,
+  linear-gradient(var(--chad-sidebar-paint), var(--chad-sidebar-paint)) var(--chad-inline-start) top / calc(100% - 10px) calc(10px - 0px) no-repeat,
+  linear-gradient(var(--chad-sidebar-paint), var(--chad-sidebar-paint)) center bottom / 100% calc(100% - 10px + 0px) no-repeat;
+  background-origin: border-box;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > :is(.privateChannels_u88IQl, .privateChannels__35e86):not([hidden], [aria-hidden="true"])):not(:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > nav:not([hidden]) > #channels)) :is(:is(.container_zrUwGA, .container__133bf), :is(.page_pog62O, .page__5e434) > :not(:is([role="dialog"], [role="alertdialog"], [role="menu"]), :is(.chat_z_gUBg, .chat_f75fb0))):has(> :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), > :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0) > :is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T)) > :is(:is(:is(.themed_ybUK7Z, .themed__9293f), .header_iar92T), :is(.subtitleContainer_z_gUBg, .subtitleContainer_f75fb0)) + :not(:is([role="dialog"], [role="alertdialog"], [role="menu"])) {
+  background-color: var(--chad-canvas-paint);
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > :is(.privateChannels_u88IQl, .privateChannels__35e86):not([hidden], [aria-hidden="true"])):not(:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > nav:not([hidden]) > #channels)) :is(.container_zrUwGA, .container__133bf) > :is(.tabBody_zrUwGA, .tabBody__133bf) > :is(.nowPlayingColumn_zrUwGA, .nowPlayingColumn__133bf) {
+  background: transparent;
+}
+
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > :is(.privateChannels_u88IQl, .privateChannels__35e86):not([hidden], [aria-hidden="true"])):not(:has(:is(.sidebarList_pog62O, .sidebarList_c48ade) > nav:not([hidden]) > #channels)) :is(.page_pog62O, .page__5e434) > .container_ZTJWQo {
+  background: radial-gradient(circle at var(--chad-inline-start) bottom,
+    var(--chad-canvas-paint) calc(10px - 1.25px),
+    var(--chad-canvas-paint) calc(10px - 0.75px) calc(10px - 0.25px),
+    var(--chad-rail-paint) calc(10px + 0.25px)) var(--chad-inline-end) 0 top calc(0px - 0px) / 10px 10px no-repeat,
+  linear-gradient(var(--chad-canvas-paint), var(--chad-canvas-paint)) var(--chad-inline-start) top / calc(100% - 10px) calc(10px - 0px) no-repeat,
+  linear-gradient(var(--chad-canvas-paint), var(--chad-canvas-paint)) center bottom / 100% calc(100% - 10px + 0px) no-repeat;
+  background-origin: border-box;
 }
 }

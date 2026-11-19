@@ -1,5 +1,7 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
+const { readFileSync } = require("node:fs");
+const { join } = require("node:path");
 const { exportCSS } = require("../studio/theme.js");
 
 const playwright = process.env.CHADRACULA_PLAYWRIGHT || "playwright";
@@ -75,6 +77,40 @@ const fixture = `<!doctype html><html class="theme-dark"><head><style>
     </div>
   </section>
 </div></body></html>`;
+
+test("plugin cards use the raised surface only in themed appearances", async () => {
+  const { chromium } = require(playwright);
+  const browser = await chromium.launch({ executablePath, headless: true });
+  try {
+    const page = await browser.newPage();
+    await page.setContent(`<!doctype html><html><head><style>
+      .theme-light, .theme-dark, .theme-darker, .theme-midnight { --card-background-default: #FFF; }
+      .vc-card-base, .vc-addon-card { background: var(--card-background-default); }
+      .vc-card-warning { background: #443725; }
+    </style></head><body><div id="app-mount"><section id="settings">
+      <div class="vc-card-base vc-card-normal">Plugin Management</div>
+      <div class="vc-addon-card">Plugin</div>
+      <div class="vc-card-base vc-card-warning">Restart required</div>
+    </section></div></body></html>`);
+    const switcher = readFileSync(join(__dirname, "../switchers/chadracula-appearance-switcher.theme.css"), "utf8");
+    for (const [name, css] of [["dark-only", exportCSS({})], ["switcher", switcher]]) {
+      const style = await page.addStyleTag({ content: css });
+      for (const appearance of ["theme-light", "theme-dark", "theme-darker", "theme-midnight"]) {
+        const backgrounds = await page.evaluate((appearance) => {
+          document.documentElement.className = appearance;
+          const settings = document.getElementById("settings");
+          settings.className = appearance;
+          return Array.from(settings.children, (card) => getComputedStyle(card).backgroundColor);
+        }, appearance);
+        const normal = name === "dark-only" && appearance === "theme-light" ? "rgb(255, 255, 255)" : "rgb(35, 35, 61)";
+        assert.deepEqual(backgrounds, [normal, normal, "rgb(68, 55, 37)"], `${name} / ${appearance}`);
+      }
+      await style.evaluate((node) => node.remove());
+    }
+  } finally {
+    await browser.close();
+  }
+});
 
 test("Discord's nested channel and member backgrounds expose exactly one pane tint", async () => {
   const { chromium } = require(playwright);
@@ -156,6 +192,7 @@ test("glass corners use one rail tint outside the sidebar and header fills", asy
             corner: [21, 21], rim: [60, 20], curve: [23, 23], sidebar: [100, 130],
             topRight: [118, 21], topRightCurve: [116, 23], bottomLeft: [21, 178], bottomLeftCurve: [23, 176],
             bottomRight: [118, 178], bottomRightCurve: [116, 176], headerCorner: [121, 21], headerCurve: [123, 23],
+            headerEndCorner: [398, 21], headerEndCurve: [396, 23],
             headerTop: [260, 20], headerBelowTop: [260, 21], header: [260, 42],
             chat: [260, 130], members: [390, 130], chatBottomStart: [121, 178], chatBottomEnd: [398, 178],
             innerChat: [316, 178], innerRoster: [321, 178],
@@ -168,11 +205,12 @@ test("glass corners use one rail tint outside the sidebar and header fills", asy
           const label = `${layout}, ${mode}, ${backdrop}`;
           const exterior = layout === "framed" ? rail : sidebar;
           const railFacingExterior = layout === "flat" && mode === "guild" ? rail : exterior;
-          equalColor(pixels.corner, railFacingExterior, `${label}: sidebar corner`);
+          equalColor(pixels.corner, rail, `${label}: sidebar corner`);
           equalColor(pixels.topRight, exterior, `${label}: top-right junction outside the arc`);
           equalColor(pixels.bottomLeft, railFacingExterior, `${label}: bottom-left junction outside the arc`);
           equalColor(pixels.sidebar, sidebar, `${label}: sidebar body`);
           equalColor(pixels.headerCorner, exterior, `${label}: chat header corner outside the arc`);
+          equalColor(pixels.headerEndCorner, mode === "guild" ? rail : exterior, `${label}: chat header end corner outside the arc`);
           equalColor(pixels.header, sidebar, `${label}: channel header`);
           equalColor(pixels.chat, chat, `${label}: chat body`);
           const members = mode === "guild" ? sidebar : chat;
@@ -207,9 +245,9 @@ test("glass corners use one rail tint outside the sidebar and header fills", asy
               equalColor(pixels.innerRoster, sidebar, `${label}: roster fill at its inner joint`);
             }
           }
-          for (const point of ["curve", "topRightCurve", "bottomLeftCurve", "bottomRightCurve", "headerCurve"]) {
+          for (const point of ["curve", "topRightCurve", "bottomLeftCurve", "bottomRightCurve", "headerCurve", "headerEndCurve"]) {
             if (layout === "framed") assert.notDeepEqual(pixels[point], sidebar, `${label}: ${point} visible`);
-            else if (mode === "guild" && ["curve", "bottomLeftCurve"].includes(point)) {
+            else if (mode === "guild" && ["curve", "bottomLeftCurve", "headerEndCurve"].includes(point)) {
               assert.notDeepEqual(pixels[point], sidebar, `${label}: ${point} present on rail side`);
             } else assert.deepEqual(pixels[point], sidebar, `${label}: ${point} absent`);
           }
@@ -217,6 +255,137 @@ test("glass corners use one rail tint outside the sidebar and header fills", asy
       }
       assert.equal(await page.locator("#chat").evaluate((node) => getComputedStyle(node).borderTopWidth),
         layout === "framed" ? "0px" : "1px");
+    }
+  } finally {
+    await browser.close();
+  }
+});
+
+test("Framed Friends and adjacent main pages share the title rail color outside both arcs", async () => {
+  const { chromium } = require(playwright);
+  const browser = await chromium.launch({ executablePath, headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 320, height: 200 } });
+    await page.setContent(`<!doctype html><html class="theme-dark"><head><style>
+      #title { position: absolute; top: 0; left: 0; width: 320px; height: 20px; }
+      #panel { position: absolute; top: 20px; left: 20px; width: 280px; height: 150px;
+        border-top: 1px solid var(--app-frame-border); background: var(--background-base-lowest); }
+      #header { height: 36px; box-sizing: border-box; border-bottom: 1px solid var(--border-subtle); }
+      #body { height: 114px; background-color: var(--background-base-lower); }
+      #active { float: right; width: 90px; height: 100%; background: var(--background-base-lower); }
+      #popout { position: absolute; right: -12px; top: 60px; background: orange; }
+    </style></head><body><div id="app-mount"><div id="title" class="bar_3zSH5d"></div>
+      <main class="page_pog62O"><div id="panel" class="container_zrUwGA">
+        <header id="header" class="themed_ybUK7Z"></header>
+        <div id="body" class="tabBody_zrUwGA"><aside id="active" class="nowPlayingColumn_zrUwGA"></aside></div>
+        <button id="popout">Popout</button>
+      </div><div role="dialog" id="settings" style="background: orange"><header class="themed_ybUK7Z"></header></div></main>
+    </div></body></html>`);
+    for (const window of ["solid", "glass"]) {
+      const style = await page.addStyleTag({ content: exportCSS({
+        layout: "framed", window, opacity: 80,
+        surfaces: { rail: "#203040", sidebar: "#141423", canvas: "#23233D" },
+      }) });
+      for (const [panel, body, active] of [
+        ["container_zrUwGA", "tabBody_zrUwGA", "nowPlayingColumn_zrUwGA"],
+        ["container__133bf", "tabBody__133bf", "nowPlayingColumn__133bf"],
+        ["chat_z_gUBg", "content_z_gUBg", ""],
+        ["adjacent-route", "adjacent-content", ""],
+      ]) {
+        await page.evaluate(([panel, content, active]) => {
+          document.getElementById("panel").className = panel;
+          document.getElementById("body").className = content;
+          document.getElementById("active").className = active;
+          document.getElementById("active").hidden = !active;
+        }, [panel, body, active]);
+        for (const backdrop of ["black", "white"]) {
+          await page.evaluate((backdrop) => { document.documentElement.style.backgroundColor = backdrop; }, backdrop);
+          const colors = await samplePixels(page, {
+            title: [150, 10], start: [21, 21], end: [298, 21], top: [150, 20], header: [150, 42],
+            startStroke: [24, 22], endStroke: [295, 22],
+            insideStart: [31, 30], insideEnd: [288, 30], list: [125, 103], right: [260, 103],
+          });
+          const context = `${panel} / ${window} / ${backdrop}`;
+          equalColor(colors.start, colors.title, `${context}: outside start arc`);
+          equalColor(colors.end, colors.title, `${context}: outside end arc`);
+          equalColor(colors.top, [45, 45, 78], `${context}: top stroke`);
+          equalColor(colors.startStroke, colors.top, `${context}: start arc stroke`);
+          equalColor(colors.endStroke, colors.top, `${context}: end arc stroke`);
+          equalColor(colors.insideStart, colors.header, `${context}: header inside start arc`);
+          equalColor(colors.insideEnd, colors.header, `${context}: header inside end arc`);
+          const canvas = window === "solid" ? [35, 35, 61] : backdrop === "black" ? [28, 28, 49] : [79, 79, 100];
+          equalColor(colors.list, canvas, `${context}: body tint`);
+          equalColor(colors.right, canvas, `${context}: one body tint across both columns`);
+          assert.equal(await page.evaluate(() => document.elementFromPoint(305, 90)?.id), "popout", context);
+          assert.equal(await page.locator("#settings").evaluate((node) => getComputedStyle(node).backgroundColor), "rgb(255, 165, 0)", context);
+        }
+      }
+      await style.evaluate((node) => node.remove());
+    }
+  } finally {
+    await browser.close();
+  }
+});
+
+test("Flat Home rounds its rail-facing sidebar and outer main corner and removes only the extra rules", async () => {
+  const { chromium } = require(playwright);
+  const browser = await chromium.launch({ executablePath, headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 360, height: 200 } });
+    await page.setContent(`<!doctype html><html class="theme-dark"><head><style>
+      #title { position: absolute; inset: 0 0 auto; height: 20px; }
+      #sidebar { position: absolute; left: 20px; top: 20px; width: 120px; height: 155px;
+        box-sizing: border-box; border-top: 1px solid var(--app-frame-border); }
+      #search { box-sizing: border-box; height: 36px; padding: 8px; border-bottom: 1px solid var(--border-subtle); }
+      #search button { border: 1px solid var(--input-border-default); }
+      #home-divider { background: var(--border-subtle); height: 1px; margin-top: 22px; }
+      #main { position: absolute; left: 140px; top: 20px; width: 200px; height: 155px;
+        box-sizing: border-box; border-top: 1px solid var(--app-frame-border); }
+      #tabs { height: 36px; box-sizing: border-box; }
+      #content { height: 110px; }
+      #quest-art { margin: 10px; width: 120px; height: 65px; background: orange; }
+    </style></head><body><div id="app-mount"><div id="title" class="bar_3zSH5d"></div>
+      <aside id="sidebar" class="sidebarList_pog62O"><nav class="privateChannels_u88IQl">
+        <div id="search" class="searchBar_u88IQl"><button>Find a conversation</button></div>
+        <div id="home-divider" class="sectionDivider_u88IQl"></div>
+      </nav></aside>
+      <main class="page_pog62O"><div id="main" class="container_ZTJWQo">
+        <div id="tabs" class="tabs_ZTJWQo"></div><div id="content"><div id="quest-art"></div></div>
+      </div></main>
+    </div></body></html>`);
+    for (const window of ["solid", "glass"]) {
+      const style = await page.addStyleTag({ content: exportCSS({
+        layout: "flat", window, opacity: 80,
+        surfaces: { rail: "#203040", sidebar: "#141423", canvas: "#23233D" },
+      }) });
+      for (const route of ["quests", "friends"]) {
+        await page.evaluate((route) => {
+          const friends = route === "friends";
+          document.getElementById("main").className = friends ? "container_zrUwGA" : "container_ZTJWQo";
+          document.getElementById("tabs").className = friends ? "themed_ybUK7Z" : "tabs_ZTJWQo";
+          document.getElementById("content").className = friends ? "tabBody_zrUwGA" : "contentSection_ZTJWQo";
+          document.getElementById("quest-art").hidden = friends;
+        }, route);
+        for (const backdrop of ["black", "white"]) {
+          await page.evaluate((backdrop) => { document.documentElement.style.backgroundColor = backdrop; }, backdrop);
+          const colors = await samplePixels(page, {
+            title: [190, 10], sidebarCorner: [21, 21], sidebarInside: [31, 30], sidebarFill: [130, 36],
+            searchEdge: [130, 56], searchBelow: [130, 57], divider: [130, 79],
+            mainCorner: [338, 21], mainInside: [328, 30], mainTop: [230, 20], mainHeader: [230, 37],
+            questArt: [170, 80],
+          });
+          const context = `${route} / ${window} / ${backdrop}`;
+          equalColor(colors.sidebarCorner, colors.title, `${context}: outside DM sidebar corner`);
+          equalColor(colors.sidebarInside, colors.sidebarFill, `${context}: inside DM sidebar corner`);
+          equalColor(colors.searchEdge, colors.searchBelow, `${context}: no DM search divider`);
+          assert.deepEqual(colors.divider, [45, 45, 78], `${context}: DM group divider preserved`);
+          equalColor(colors.mainCorner, colors.title, `${context}: outside Home main corner`);
+          equalColor(colors.mainInside, colors.mainHeader, `${context}: inside Home main corner`);
+          equalColor(colors.mainTop, colors.mainHeader, `${context}: no top rule above Home main`);
+          if (route === "quests") assert.deepEqual(colors.questArt, [255, 165, 0], `${context}: Quest content preserved`);
+        }
+      }
+      await style.evaluate((node) => node.remove());
     }
   } finally {
     await browser.close();
