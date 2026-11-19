@@ -146,7 +146,8 @@ select {
   font-size: .84rem;
   min-height: 31px;
 }
-.accent-preset-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+.appearance-mode-row, .accent-preset-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+.preview-appearance-row { grid-template-columns: auto minmax(0, 110px); max-width: max-content; margin-bottom: 8px; }
 .accent-preset-control { display: grid; grid-template-columns: minmax(0, 1fr) 28px; align-items: center; gap: 7px; }
 .accent-preset-control select { font-family: var(--studio-mono); font-size: .8rem; }
 .accent-swatch { aspect-ratio: 1; border: 1px solid #ffffff45; border-radius: 6px; background: var(--accent-swatch); }

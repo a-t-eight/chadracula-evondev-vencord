@@ -1,4 +1,4 @@
-# Testing Chadracula-Evondev 1.0.1
+# Testing Chadracula-Evondev
 
 The desktop and native material results below cover the 12 variants tagged `v1.0.1`. Nord Blue, Pink and Violet were each tested in Flat and Framed, with Solid and 80% Glass. The tagged manifest SHA-256 is `78246156b05fe1f63258fb1924c4db8e9ab19b68ae30ea5ba027f276a14c87a8`.
 
@@ -63,20 +63,26 @@ An isolated smoke test paired OpenAsar `nightly-5a44615` with Vencord `e75ac9a`.
 
 ## Offline Studio
 
-A fresh extraction rebuilt all generated files byte for byte. **16 Node tests and 11 Chromium checks passed**, including exact CSS and JSON downloads after importing every variant at 1280 px and 320 px, reload persistence, the two reusable Glass templates, keyboard and custom color controls, and synthetic renderer paint. See [Rebuild and verify](README.md#rebuild-and-verify) to rerun the checks.
+**18 Node tests and 16 Chromium checks passed**, including exact CSS and JSON downloads after importing every variant at 1280 px and 320 px, reload persistence, the two reusable Glass templates, keyboard and custom color controls, and synthetic renderer paint. The three appearance modes were tested against synthetic Discord appearance changes, nested Light settings, custom profile themes and forced colors. Flat and Framed Glass cleared the three renderer backdrop layers in each enabled appearance.
 
-## Renderer fixes after v1.0.1
+The current [manifest](themes/manifest.json) has SHA-256 `b0d71533a604208c779d68457aa84d75a4fa902178f8bce54e66f7f44181bf73`. All 12 JSON files match the tag byte for byte. Each CSS maps `--card-background-default` to the existing raised surface. The Framed stylesheets round both upper corners of the main panel. The Flat stylesheets round the rail-facing Home sidebar corner and the outer upper corner of Home and guild chat panes. The title bar and rail color fills the space outside the curves.
 
-This follow-up covers the existing fixed-accent Studio exports and the standalone appearance switcher. The fixed-accent exports apply to Discord’s dark appearances.
+The browser fixtures verify Vencord plugin cards in each active appearance. Pixel checks exercise Framed Friends, DM and guild chat, and representative adjacent page and forum structures. Flat fixtures exercise Quests, Friends and guild chat in Solid and Glass. They sample the rail color outside the curves and the pane colors inside. They also verify that the DM search divider and top Home rule are gone while the DM group separator and both guild header dividers remain visible. The fixtures check that a popout remains interactive beyond the pane perimeter. See [Rebuild and verify](README.md#rebuild-and-verify) to rerun the checks.
 
-The fixed variants and appearance switcher use Chadracula’s raised surface for normal Discord and Vencord settings cards. Chromium fixtures check that the warning card retains its feedback fill and the fixed variants leave native Light cards unchanged.
+The popup keyboard test uses Chromium’s headless shell. On macOS, the full Chrome for Testing 151 executable in headless mode reported a closed popup after pressing Space, including on a plain HTML select. The same control and the Studio test both reported an open popup in the headless shell.
 
-Framed pixel checks cover guild and direct-message chat, Friends, and adjacent pages. They compare the fill outside both upper arcs with the title bar, check the frame stroke over black and white backdrops, and test that a popout beyond the main pane remains interactive.
+## Native follow-up for the current Studio and renderer
 
-Flat pixel checks cover Friends and Quests in Solid and Glass. They check the outer corner fills, the rules above the Home content and beneath the DM search, and the retained DM group divider and Quest artwork. The guild fixture also checks the outer main corner and the shared top stroke.
+All 24 export, appearance and client combinations passed on macOS. The checks used the downloaded Studio CSS in Discord Stable with Vencord and in Vesktop. Each appearance was selected in the client, and the resulting accent and Plugins card fill were sampled from the window.
 
-### Native follow-up on macOS
+| Studio export | Light | Ash | Dark | Onyx |
+| --- | --- | --- | --- | --- |
+| Existing configuration, Dark appearances only | Stock Discord Light | Violet | Violet | Violet |
+| All appearances, fixed accent | Violet | Violet | Violet | Violet |
+| Accent by appearance | Nord Blue | Pink | Violet | Custom green `#50FA7B` |
 
-In Vesktop, Framed Solid and Glass matched the title-bar fill outside both upper corners of Friends and the upper-right corner of guild chat. Flat Solid and Glass rounded the outside corners in Friends and Quests and the upper-right corner in guild chat. Quests cleared the rules below DM search and above the main pane, while both guild header dividers remained visible. Over a light desktop, the fill sampled outside each Flat Glass Home corner matched the title bar exactly.
+In both clients, the public switcher painted the Plugin Management and plugin cards with the palette’s raised surface in Light and Dark. The computed palette color is `#23233D`. In official Discord, a captured interior patch measured `#23233B` in both appearances.
 
-With the appearance switcher enabled, the Vencord Plugins page showed the themed dark cards in Discord Light and Dark in both Vesktop and Discord desktop.
+Flat Solid and Glass were checked on Friends, Quests and a guild text channel in both clients. Both outer Home corners were rounded. Quests cleared the line below DM search and the one above the main pane. In guild chat the upper-right corner was rounded, and both horizontal header dividers continued across the sidebar-to-chat join. Framed Glass was checked on Friends and guild chat in both clients, and Framed Solid on the same routes in Vesktop.
+
+A separate Vesktop check isolated a local QuickCSS rule that forced a background on the sidebar shell and its `::after` element. With that rule applied, the outside of the left Flat Glass arc measured `#1B1A2E`. With QuickCSS disabled, both outside corners and the title bar measured `#2D2C3D` on the same backdrop. The full native material matrices above apply to the tagged release.

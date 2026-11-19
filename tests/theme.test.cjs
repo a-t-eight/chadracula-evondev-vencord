@@ -85,6 +85,49 @@ test("theme cards describe the selected colors, pane, and window finish", () => 
   }
 });
 
+test("appearance accents round-trip with canonical keys, custom hex, and the fixed accent fallback", () => {
+  const theme = loadEngine();
+  const config = theme.normalizeConfig({
+    appearanceMode: "by-appearance",
+    accent: "violet",
+    appearanceAccents: { light: "nord_blue", ash: "missing", dark: "base0D", onyx: "#bAda55", invalid: "pink" },
+    link: "accent",
+    threads: "accent",
+    selection: "accent",
+  });
+  assert.deepEqual(config.appearanceAccents, { light: "nord_blue", ash: "violet", dark: "base0D", onyx: "#BADA55" });
+  const reloaded = theme.normalizeConfig(JSON.parse(JSON.stringify(config)));
+  assert.equal(reloaded.appearanceMode, "by-appearance");
+  assert.deepEqual(reloaded, config);
+  for (const [appearance, color, readable] of [
+    ["light", "#05C3FF", "#05C3FF"], ["ash", "#9A86FD", "#A998FD"],
+    ["dark", "#20E3B2", "#20E3B2"], ["onyx", "#BADA55", "#BADA55"],
+  ]) {
+    const values = theme.roleValues(reloaded, appearance);
+    assert.equal(values["--chad-accent"], color, appearance);
+    assert.equal(values["--chad-selected"], color, appearance);
+    assert.equal(values["--chad-link"], readable, appearance);
+    assert.equal(values["--chad-thread-1"], readable, appearance);
+  }
+  const fixed = theme.normalizeConfig({ ...reloaded, appearanceMode: "all" });
+  assert.deepEqual(fixed.appearanceAccents, reloaded.appearanceAccents);
+  assert.equal(theme.roleValues(fixed, "light")["--chad-accent"], "#9A86FD");
+  assert.equal(theme.roleValues({ ...reloaded, appearanceMode: "invalid" }, "light")["--chad-accent"], "#9A86FD");
+  assert.equal(theme.exportCSS({ ...fixed, appearanceMode: "dark-only" }), theme.exportCSS({ accent: "violet", link: "accent", threads: "accent", selection: "accent" }));
+});
+
+test("theme cards identify the all-appearance exports and their accent choices", () => {
+  const theme = loadEngine();
+  const fixed = { appearanceMode: "all", accent: "violet", window: "glass" };
+  const adaptive = { ...fixed, appearanceMode: "by-appearance", appearanceAccents: { light: "nord_blue", ash: "pink", dark: "violet", onyx: "#50FA7B" } };
+  assert.equal(theme.exportIdentity(fixed).filename, "chadracula-violet-all-appearances-glass-framed-teal.theme.css");
+  assert.match(theme.exportCSS(fixed), /^ \* @description violet across all Discord appearances,/m);
+  const filename = "chadracula-appearance-accents-glass-framed-teal.theme.css";
+  assert.equal(theme.exportIdentity(adaptive).filename, filename);
+  assert.equal(theme.exportCSS(adaptive).match(/^ \* @name (.*)$/m)?.[1] + ".theme.css", filename);
+  assert.match(theme.exportCSS(adaptive), /^ \* @description nord blue on Light, pink on Ash, violet on Dark, #50fa7b on Onyx,/m);
+});
+
 test("export provenance links the palette and retains its pinned upstream license", () => {
   const theme = loadEngine();
   const css = theme.exportCSS();

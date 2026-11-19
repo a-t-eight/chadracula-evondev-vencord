@@ -60,6 +60,7 @@
   const canonicalColors = Object.freeze({ ...base30, ...base16 });
   const themeName = "chadracula";
   const defaultMuted = "teal";
+  const defaultAppearanceMode = "dark-only";
   const defaults = Object.freeze({
     accent: "dark_purple",
     text: "warm",
@@ -76,7 +77,13 @@
     return Object.freeze(Object.entries(entries).map(([value, label]) => Object.freeze({ value, label })));
   }
 
+  const appearances = choices({ light: "Light", ash: "Ash", dark: "Dark", onyx: "Onyx" });
   const options = Object.freeze({
+    appearanceMode: choices({
+      [defaultAppearanceMode]: "Dark appearances only",
+      all: "All appearances (fixed accent)",
+      "by-appearance": "Accent by appearance",
+    }),
     accent: choices({
       ...Object.fromEntries(Object.keys(canonicalColors).map((name) => [name, name])),
       dark_purple: "Dark purple", violet: "Violet", purple: "Lilac",
@@ -162,6 +169,7 @@
     if (!config || typeof config !== "object") return result;
 
     for (const [key, settings] of Object.entries(options)) {
+      if (key === "appearanceMode" && config[key] === defaultAppearanceMode) continue;
       if (Object.hasOwn(colorRoles, key)) {
         result[key] = normalizeColorChoice(colorRoles[key], config[key]) ?? result[key];
       } else if (Array.isArray(settings) && settings.some(({ value }) => value === config[key])) {
@@ -180,6 +188,14 @@
     const foregrounds = colorOverrides(config.foregrounds, "foregrounds");
     if (Object.keys(surfaces).length) result.surfaces = surfaces;
     if (Object.keys(foregrounds).length) result.foregrounds = foregrounds;
+
+    const appearanceAccents = {};
+    for (const { value } of appearances) {
+      const choice = normalizeColorChoice(colorRoles.accent, config.appearanceAccents?.[value]);
+      if (choice) appearanceAccents[value] = choice;
+      else if (result.appearanceMode === "by-appearance") appearanceAccents[value] = result.accent;
+    }
+    if (Object.keys(appearanceAccents).length) result.appearanceAccents = appearanceAccents;
     return result;
   }
 
@@ -188,8 +204,17 @@
     const colorLabel = (choice) => choice.replace(/^palette:/, "").replaceAll("_", " ").toLowerCase();
     const accentLabel = colorLabel(accent);
     const mutedLabel = colorLabel(config.foregrounds?.muted ?? defaultMuted);
-    const name = [themeName, accentLabel, window, layout, mutedLabel].join("-").replaceAll(" ", "-").replaceAll("#", "");
-    const description = `${accentLabel}, ${mutedLabel} muted text, ${layout}, ${window}, supports transparency - adapted chadracula-evondev for discord`;
+    let accentName = accentLabel;
+    let accentDescription = accentLabel;
+    if (config.appearanceMode === "all") {
+      accentName = `${accentLabel}-all-appearances`;
+      accentDescription = `${accentLabel} across all Discord appearances`;
+    } else if (config.appearanceMode === "by-appearance") {
+      accentName = "appearance-accents";
+      accentDescription = appearances.map(({ value, label }) => `${colorLabel(config.appearanceAccents[value])} on ${label}`).join(", ");
+    }
+    const name = [themeName, accentName, window, layout, mutedLabel].join("-").replaceAll(" ", "-").replaceAll("#", "");
+    const description = `${accentDescription}, ${mutedLabel} muted text, ${layout}, ${window}, supports transparency - adapted chadracula-evondev for discord`;
     return { name, description };
   }
 
@@ -270,7 +295,7 @@
     return target;
   }
 
-  function roleValues(input) {
+  function roleValues(input, appearance = "dark") {
     const config = normalizeConfig(input);
     const c = base30;
     const b = base16;
@@ -296,7 +321,10 @@
       backgrounds.push(mix(surface, "#FFFFFF", 1 - opacity), mix(surface, "#000000", 1 - opacity));
     }
 
-    const accent = paletteColor(config.accent, true) ?? config.accent;
+    const appearanceAccent = config.appearanceMode === "by-appearance" && Object.hasOwn(config.appearanceAccents, appearance)
+      ? config.appearanceAccents[appearance]
+      : config.accent;
+    const accent = resolveColor(appearanceAccent, true);
     const accentInk = onColor(accent);
     const accentStateTarget = contrast(accentInk, mix(accent, accentInk, 0.09)) >= 4.5
       ? accentInk
@@ -383,7 +411,18 @@
 
   // The semantic token names and current selectors below were checked against Discord web build 675174.
   // Older Visual Refresh aliases cover the September 2026 desktop snapshots in the workspace.
-  const themeScope = ":is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *)";
+  const discordAppearances = {
+    light: ".theme-light",
+    ash: ".theme-dark",
+    dark: ".theme-darker",
+    onyx: ".theme-midnight, .theme-amoled",
+  };
+  const { light, ash, dark, onyx } = discordAppearances;
+  const darkAppearances = [ash, dark, onyx].join(", ");
+  const darkAppearanceSelector = `:is(${darkAppearances})`;
+  const excludedSubtrees = [".custom-user-profile-theme", ".enable-forced-colors"];
+  const excludeDescendants = `:not(${excludedSubtrees.flatMap((selector) => [selector, `${selector} *`]).join(", ")})`;
+  const themeScope = `${darkAppearanceSelector}${excludeDescendants}`;
   const view = `${themeScope} #app-mount`;
   const discordRoles = {
     rail: "app-frame-background background-base-lowest background-tertiary bg-base-tertiary",
@@ -618,9 +657,9 @@ ${view} ${sidebarList} > nav:has(> #channels) {
     return `
 /* Renderer transparency. Select a native backdrop in your desktop client.
    Apply tint to sibling panes and clear only ancestor paint layers. */
-:is(html, body):is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled),
-html:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled) > body,
-:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled) #app-mount {
+:is(html, body)${darkAppearanceSelector},
+html${darkAppearanceSelector} > body,
+${darkAppearanceSelector} #app-mount {
   background-color: transparent;
 }
 ${framed ? "" : `
@@ -945,20 +984,84 @@ ${view} ${framedChat} ${chatContent} ~ ${joinedRoster} {
 }
 `;
 
+  const paletteProperties = [
+    ...Object.entries(base30).map(([key, value]) => [`--chad-base30-${key}`, value]),
+    ...Object.entries(base16).map(([key, value]) => [`--chad-base16-${key}`, value]),
+  ];
+  const discordTokens = Object.entries(discordRoles).flatMap(([role, variables]) => (
+    variables.split(" ").map((property) => [`--${property}`, `var(--chad-${role})`])
+  ));
+
+  function declarations(properties) {
+    return properties.map(([key, value]) => `  ${key}: ${value};`).join("\n");
+  }
+
+  function declarationRule(selector, properties) {
+    return `${selector} {\n${declarations(properties)}\n}`;
+  }
+
+  function allAppearanceCSS(config, values, renderer) {
+    const byAppearance = config.appearanceMode === "by-appearance";
+    const rolesByAppearance = byAppearance
+      ? appearances.map(({ value }) => roleValues(config, value))
+      : [values];
+    const invariant = new Set(Object.keys(values).filter((key) => (
+      rolesByAppearance.every((roles) => roles[key] === values[key])
+    )));
+    const common = Object.entries(values).filter(([key]) => invariant.has(key));
+    // Discord can retain the Ash class together with a more specific dark appearance.
+    const selectors = [
+      `:scope${light}`,
+      `:scope${ash}:not(${light}, ${dark}, ${onyx})`,
+      `:scope${dark}:not(${light}, ${onyx})`,
+      `:scope:is(${onyx}):not(${light})`,
+    ];
+    const overrides = byAppearance && invariant.size < Object.keys(values).length
+      ? rolesByAppearance.map((roles, index) => (
+        declarationRule(selectors[index], Object.entries(roles).filter(([key]) => !invariant.has(key)))
+      )).join("\n\n") + "\n\n"
+      : "";
+
+    const excluded = excludedSubtrees.join(", ");
+    const scopedRenderer = renderer.replaceAll(darkAppearanceSelector, `:is(:scope, ${darkAppearances})`);
+    // Under the Light appearance, Discord redeclares semantic colors on nested Light settings and dialog providers.
+    const semanticScope = `:is(:scope, ${darkAppearances}, ${light}:where(:scope${light} *))${excludeDescendants}`;
+    return `
+@media not (forced-colors: active) {
+@scope (:root:is(${darkAppearances}, ${light}):not(${excluded})) to (:is(${excluded})) {
+${declarationRule(":scope", paletteProperties)}
+
+/* Resolved preferences. Edit through the studio to recalculate paired colors. */
+${declarationRule(":scope", common)}
+
+${overrides}:scope${light},
+:scope${light} ${light} { color-scheme: dark; }
+
+${declarationRule(semanticScope, discordTokens)}
+${scopedRenderer}}
+}
+`;
+  }
+
   function exportCSS(input) {
     const config = normalizeConfig(input);
     const { name, description } = exportMetadata(config);
     const framed = config.layout === "framed";
     const glass = config.window === "glass";
     const values = roleValues(config);
-    const paletteProperties = [
-      ...Object.entries(base30).map(([key, value]) => [`--chad-base30-${key}`, value]),
-      ...Object.entries(base16).map(([key, value]) => [`--chad-base16-${key}`, value]),
-    ];
-    const declarations = (properties) => properties.map(([key, value]) => `  ${key}: ${value};`).join("\n");
-    const tokens = Object.entries(discordRoles).flatMap(([role, variables]) => (
-      variables.split(" ").map((property) => [`--${property}`, `var(--chad-${role})`])
-    ));
+    const renderer = discordCSS(framed) + (glass ? nativeGlassCSS(framed) : "")
+      + uniformityCSS(glass) + (framed ? framedUniformityCSS : flatUniformityCSS());
+    const styles = config.appearanceMode ? allAppearanceCSS(config, values, renderer) : `:root {
+${declarations(paletteProperties)}
+
+  /* Resolved preferences. Edit through the studio to recalculate paired colors. */
+${declarations(Object.entries(values))}
+}
+
+@media not (forced-colors: active) {
+${declarationRule(themeScope, discordTokens)}
+${renderer}}
+`;
 
     return `/**
  * @name ${name}
@@ -1003,23 +1106,11 @@ ${view} ${framedChat} ${chatContent} ~ ${joinedRoster} {
    DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
    OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
-:root {
-${declarations(paletteProperties)}
-
-  /* Resolved preferences. Edit through the studio to recalculate paired colors. */
-${declarations(Object.entries(values))}
-}
-
-@media not (forced-colors: active) {
-${themeScope} {
-${declarations(tokens)}
-}
-${discordCSS(framed)}${glass ? nativeGlassCSS(framed) : ""}${uniformityCSS(glass)}${framed ? framedUniformityCSS : flatUniformityCSS()}}
-`;
+${styles}`;
   }
 
   const theme = Object.freeze({
-    defaults, options, palette, colorRoles, uniformityPaint, filename: exportIdentity().filename,
+    defaults, options, palette, colorRoles, appearances, defaultAppearanceMode, uniformityPaint, filename: exportIdentity().filename,
     normalizeConfig, getColorChoice, setColorChoice, inputColor, roleValues, exportIdentity, exportCSS,
   });
   if (typeof module === "object" && module.exports) module.exports = theme;

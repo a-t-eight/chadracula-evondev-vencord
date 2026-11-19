@@ -31,15 +31,15 @@ For a fixed accent and layout, download one CSS file for your client. Use its ma
 | Pink | [CSS](themes/chadracula-pink-solid-flat-teal.theme.css) · [JSON](themes/chadracula-pink-solid-flat-teal.json) | [CSS](themes/chadracula-pink-glass-flat-teal.theme.css) · [JSON](themes/chadracula-pink-glass-flat-teal.json) | [CSS](themes/chadracula-pink-solid-framed-teal.theme.css) · [JSON](themes/chadracula-pink-solid-framed-teal.json) | [CSS](themes/chadracula-pink-glass-framed-teal.theme.css) · [JSON](themes/chadracula-pink-glass-framed-teal.json) |
 | Violet | [CSS](themes/chadracula-violet-solid-flat-teal.theme.css) · [JSON](themes/chadracula-violet-solid-flat-teal.json) | [CSS](themes/chadracula-violet-glass-flat-teal.theme.css) · [JSON](themes/chadracula-violet-glass-flat-teal.json) | [CSS](themes/chadracula-violet-solid-framed-teal.theme.css) · [JSON](themes/chadracula-violet-solid-framed-teal.json) | [CSS](themes/chadracula-violet-glass-framed-teal.theme.css) · [JSON](themes/chadracula-violet-glass-framed-teal.json) |
 
-**Flat** uses continuous pane dividers, rounds the pane corners beside the server rail, and rounds the outer upper corner of the main pane in Home and guild views. **Framed** adds rounded outlines around the panes and matches the fill outside both upper main-panel corners to the title bar and server rail. **Solid** gives the themed panes opaque fills. **Glass** ships with 80% pane opacity and can show the native backdrop when the client and OS expose it. The twelve themes use the inherited Base46 `teal` muted text role. It resolves to `#92A2D4` in Solid and `#ADB9DF` in Glass for readability.
+**Flat** rounds the rail-facing Home sidebar and the outer upper corner of Home and guild chat panes while keeping the guild header dividers. **Framed** adds rounded outlines around the panes and matches the fill outside both upper main-panel corners to the title bar and server rail. **Solid** gives the themed panes opaque fills. **Glass** ships with 80% pane opacity and can show the native backdrop when the client and OS expose it. The twelve themes use the inherited Base46 `teal` muted text role. It resolves to `#92A2D4` in Solid and `#ADB9DF` in Glass for readability.
 
 ## Install on macOS or Windows
 
-Use these steps for a fixed variant from the table above.
+Use these steps for a downloaded variant or Studio export.
 
 1. Install [Vesktop](https://vesktop.dev/) or [Vencord for Discord desktop](https://vencord.dev/download/) using the corresponding project’s instructions.
 2. In the desktop client, open **User Settings → Themes → Local Themes → Open Themes Folder**. Copy the `.theme.css` file there and enable it under **Local Themes**. Select **Load missing Themes** if the file is absent from the list. [Vencord’s local theme controls](https://github.com/Vendicated/Vencord/blob/e75ac9ace41f6212cfaa2d5f3670830be392da4e/src/components/settings/tabs/themes/LocalThemesTab.tsx#L145-L194)
-3. Select Discord’s dark appearance and use one complete theme at a time. If existing theme or QuickCSS rules conflict, record your previous settings so you can restore them.
+3. Use one complete theme at a time. For variants from the table or Studio’s **Dark appearances only** mode, select Ash, Dark or Onyx in Discord. If existing theme or QuickCSS rules conflict, record your previous settings so you can restore them.
 
 If you also use OpenAsar, manage the theme and native material in Vencord. The [loader check](TESTING.md#openasar-loader-check) verified stylesheet delivery in isolation. The native Discord tests used the stock bootstrap with Vencord.
 
@@ -68,8 +68,18 @@ Remove the switcher URL from **Online Themes** and click outside the text box to
 
 1. Keep the [`studio/`](studio/) directory together and open [`studio/index.html`](studio/index.html) directly in a modern browser. Studio runs from local files.
 2. Use **Import config** with a JSON file from the table or one of the [Violet Glass templates](templates/README.md). You can also start with a built-in preset.
-3. Pick Base30 and Base16 colors by name or enter custom Hex, RGB or HSV values. Use **Inspect palette** to see the resolved values. Switch the preview between the sample server and direct messages, or use **Save as A** and **Compare** to compare with your draft.
-4. **Download CSS** creates the installable `.theme.css` file. Its filename and in-client theme name follow `chadracula-<accent>-<window>-<layout>-<muted>`. **Save config** creates editable version 1 JSON for re-import later. The Studio saves your draft in browser storage when available.
+3. Set **Export appearance** to choose how the theme responds to Discord’s appearance setting.
+
+   | Mode | Result |
+   | --- | --- |
+   | Dark appearances only | One accent in Ash, Dark and Onyx. Light keeps Discord’s default styling. Older configurations use this mode by default. |
+   | All appearances (fixed accent) | One accent in Light, Ash, Dark and Onyx. |
+   | Accent by appearance | Set each appearance’s accent and select **Preview appearance** to inspect it. The four choices start with your fixed accent and Studio remembers them when you change export mode. |
+
+   Both all-appearance modes apply Chadracula’s dark surfaces in Light. Legacy AMOLED uses the Onyx accent.
+
+4. Pick Base30 and Base16 colors by name or enter custom Hex, RGB or HSV values. Use **Inspect palette** to see the resolved values. Switch the preview between the sample server and direct messages, or use **Save as A** and **Compare** to compare with your draft.
+5. **Download CSS** creates the installable `.theme.css` file. The filename matches the name displayed in the client, and the theme card describes the accent or appearance mapping. **Save config** creates editable version 1 JSON for re-import later. The Studio saves your draft in browser storage when available.
 
 The preview uses synthetic content. Generation and preview run locally without a client account.
 
@@ -93,7 +103,7 @@ npx playwright install chromium
 node --test "tests/*.browser.cjs"
 ```
 
-The suite exercises import, preview, exact CSS and JSON downloads, and reload for all twelve release variants at desktop and narrow widths. It also checks keyboard navigation, custom color editors, and pane paint against synthetic fixtures. To use an existing Playwright installation or Chromium binary, set `CHADRACULA_PLAYWRIGHT` or `CHADRACULA_CHROMIUM` to its path before running the tests. The browser tests exercise the renderer using local fixtures. The OS compositor and real desktop client need separate validation.
+The suite exercises import, preview, exact CSS and JSON downloads, and reload for all twelve variants at desktop and narrow widths. It also checks the three export modes, keyboard navigation, custom color editors, nested Light settings, forced colors, and pane and plugin card paint against synthetic fixtures. To use an existing Playwright installation or Chromium binary, set `CHADRACULA_PLAYWRIGHT` or `CHADRACULA_CHROMIUM` to its path before running the tests. The browser tests exercise the renderer using local fixtures. The OS compositor and real desktop client need separate validation.
 
 ## License and credits
 

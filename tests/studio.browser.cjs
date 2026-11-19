@@ -3,10 +3,84 @@ const { readFile } = require("node:fs/promises");
 const { join } = require("node:path");
 const { pathToFileURL } = require("node:url");
 const test = require("node:test");
-const { palette } = require("../studio/theme.js");
+const { exportCSS, palette } = require("../studio/theme.js");
 
 const playwright = process.env.CHADRACULA_PLAYWRIGHT || "playwright";
 const executablePath = process.env.CHADRACULA_CHROMIUM;
+
+test("appearance controls drive keyboard preview, comparison and CSS and JSON downloads", async () => {
+  const { chromium } = require(playwright);
+  const browser = await chromium.launch({ executablePath, headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 320, height: 760 } });
+    const pageErrors = [];
+    page.on("pageerror", (error) => pageErrors.push(error.message));
+    await page.goto(pathToFileURL(join(__dirname, "../studio/index.html")).href);
+    const mode = page.getByLabel("Export appearance", { exact: true });
+    assert.equal(await mode.inputValue(), "dark-only");
+    await page.locator("#accent").selectOption("violet");
+    await mode.selectOption("all");
+    async function save(button) {
+      const [download] = await Promise.all([page.waitForEvent("download"), page.locator(button).click()]);
+      return { name: download.suggestedFilename(), text: await readFile(await download.path(), "utf8") };
+    }
+    const fixed = await save("#download-css");
+    assert.equal(fixed.name, "chadracula-violet-all-appearances-solid-framed-teal.theme.css");
+    assert.equal(fixed.text, exportCSS({ accent: "violet", appearanceMode: "all" }));
+    await page.locator("#save-baseline").click();
+    await mode.selectOption("by-appearance");
+    assert.equal(await page.locator("#accent").isVisible(), false);
+    const preview = page.getByLabel("Preview appearance", { exact: true });
+    const color = (slot = "working") => page.locator(`[data-preview="${slot}"]`)
+      .evaluate((node) => node.style.getPropertyValue("--chad-accent"));
+    const light = page.getByLabel("Light accent", { exact: true });
+    assert.equal(await light.inputValue(), "violet");
+    await light.selectOption("nord_blue");
+    assert.equal(await preview.inputValue(), "light");
+    assert.equal(await color(), "#05C3FF");
+    const ash = page.getByLabel("Ash accent", { exact: true });
+    await ash.selectOption("baby_pink");
+    await ash.press("ArrowDown");
+    assert.equal(await ash.inputValue(), "pink");
+    assert.equal(await ash.evaluate((node) => node === document.activeElement), true);
+    assert.equal(await preview.inputValue(), "ash");
+    assert.equal(await color(), "#FF6BCB");
+    await page.getByLabel("Dark accent", { exact: true }).selectOption("base0D");
+    assert.equal(await color(), "#20E3B2");
+    const onyx = page.getByLabel("Onyx accent", { exact: true });
+    await onyx.selectOption("custom");
+    const hex = page.locator("#accent-onyx-editor").getByLabel("Hex value");
+    await hex.fill("#50fa7b");
+    assert.equal(await color(), "#50FA7B");
+    await page.locator("#compare").click();
+    assert.equal(await color("saved"), "#9A86FD");
+    await preview.selectOption("light");
+    assert.equal(await color(), "#05C3FF");
+    assert.equal(await color("saved"), "#9A86FD");
+    const { text } = await save("#save-config");
+    const config = JSON.parse(text).config;
+    assert.equal(config.appearanceMode, "by-appearance");
+    assert.deepEqual(config.appearanceAccents, { light: "nord_blue", ash: "pink", dark: "base0D", onyx: "#50FA7B" });
+
+    await mode.selectOption("dark-only");
+    assert.equal(await page.locator("#accent").inputValue(), "violet");
+    assert.equal(await preview.isVisible(), false);
+    await page.locator("#config-file").setInputFiles({ name: "appearance.json", mimeType: "application/json", buffer: Buffer.from(text) });
+    await page.waitForFunction(() => document.getElementById("appearanceMode").value === "by-appearance");
+    await page.reload();
+    assert.equal(await mode.inputValue(), "by-appearance");
+    assert.equal(await onyx.inputValue(), "custom");
+    await preview.selectOption("onyx");
+    assert.equal(await color(), "#50FA7B");
+    const adaptive = await save("#download-css");
+    assert.equal(adaptive.name, "chadracula-appearance-accents-solid-framed-teal.theme.css");
+    assert.equal(adaptive.text, exportCSS(config));
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), 320);
+    assert.deepEqual(pageErrors, []);
+  } finally {
+    await browser.close();
+  }
+});
 
 test("palette presets and custom formats drive preview and downloads in the offline Studio", async () => {
   const { chromium } = require(playwright);

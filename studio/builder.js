@@ -22,6 +22,7 @@
     ["Thread", "thread-1"], ["Success", "success"],
   ];
   const previewGrid = byId("preview-grid");
+  const previewAppearanceSelect = byId("preview-appearance");
   const dialog = byId("palette");
   const form = byId("appearance");
 
@@ -36,6 +37,7 @@
   const draft = loadDraft();
   let config = theme.normalizeConfig(draft.config);
   let saved = draft.saved ? theme.normalizeConfig(draft.saved) : null;
+  let previewAppearance = "dark";
   let comparing = false;
   let inspecting = false;
   let statusTimer;
@@ -72,7 +74,7 @@
   function setConfig(next, { resetEditors = false } = {}) {
     config = theme.normalizeConfig(next);
     refreshTheme();
-    if (resetEditors) for (const editor of Object.values(colorEditors)) editor.reset();
+    if (resetEditors) for (const editor of [...Object.values(colorEditors), ...Object.values(appearanceEditors)]) editor.reset();
     persist();
   }
 
@@ -80,6 +82,8 @@
     const select = byId(key);
     for (const { value, label } of values) select.add(new Option(label, value));
   }
+  for (const { label, value } of theme.appearances) previewAppearanceSelect.add(new Option(label, value));
+
   function roleEditorFields(id, label) {
     return `<div class="form-row">
       <label for="${id}">${label}</label>
@@ -105,6 +109,7 @@
   }
 
   byId("text-editor").innerHTML = roleEditorFields("text", "Text tone");
+  byId("appearance-accents").innerHTML = roleEditors(theme.appearances.map(({ value, label }) => [`accent-${value}`, `${label} accent`]));
   byId("interaction-colors").innerHTML = roleEditors([
     ["selection", "Selection"], ["threads", "Thread labels"], ["link", "Links"], ["mention", "Mentions"],
   ]);
@@ -116,6 +121,13 @@
   const colorEditors = Object.fromEntries(Object.entries(theme.colorRoles).map(([id, role]) => [
     id,
     attachColorPicker(byId(id + "-editor"), role, (choice) => setConfig(theme.setColorChoice(config, id, choice))),
+  ]));
+  const appearanceEditors = Object.fromEntries(theme.appearances.map(({ value }) => [
+    value,
+    attachColorPicker(byId(`accent-${value}-editor`), theme.colorRoles.accent, (choice) => {
+      previewAppearance = value;
+      setConfig({ ...config, appearanceAccents: { ...config.appearanceAccents, [value]: choice } });
+    }),
   ]));
 
   byId("presets").innerHTML = presets.map(({ id, label, config: choice }) => {
@@ -353,9 +365,12 @@
   }
 
   function refreshPreviewStyles() {
+    byId("preview-appearance-row").hidden = config.appearanceMode !== "by-appearance"
+      && !(comparing && saved?.appearanceMode === "by-appearance");
+    previewAppearanceSelect.value = previewAppearance;
     for (const window of previewGrid.querySelectorAll(".preview-window")) {
       const current = window.dataset.preview === "saved" ? saved : config;
-      const roles = theme.roleValues(current);
+      const roles = theme.roleValues(current, previewAppearance);
       for (const [key, value] of Object.entries(roles)) window.style.setProperty(key, value);
       window.style.setProperty("--preview-framed-sidebar", theme.uniformityPaint.sidebar);
       window.style.setProperty("--preview-framed-header", theme.uniformityPaint.header);
@@ -378,8 +393,18 @@
   }
 
   function refreshTheme() {
-    const roles = theme.roleValues(config);
-    for (const key of Object.keys(options)) byId(key).value = config[key];
+    const appearanceMode = config.appearanceMode ?? theme.defaultAppearanceMode;
+    const byAppearance = appearanceMode === "by-appearance";
+    const roles = theme.roleValues(config, previewAppearance);
+    for (const key of Object.keys(options)) byId(key).value = key === "appearanceMode" ? appearanceMode : config[key];
+    byId("appearance-note").hidden = appearanceMode === theme.defaultAppearanceMode;
+    byId("accent-editor").hidden = byAppearance;
+    byId("appearance-accents").hidden = !byAppearance;
+    if (byAppearance) {
+      for (const [appearance, editor] of Object.entries(appearanceEditors)) {
+        editor.sync(config.appearanceAccents[appearance], colorValue(theme.roleValues(config, appearance), "accent"));
+      }
+    }
     for (const [id, editor] of Object.entries(colorEditors)) {
       editor.sync(theme.getColorChoice(config, id), theme.inputColor(config, id, roles), colorValue(roles, theme.colorRoles[id].cssRole));
     }
@@ -410,7 +435,9 @@
   function jumpToRole(element) {
     const role = element?.closest("[data-role]");
     if (!role) return;
-    const id = role.dataset.role;
+    const id = role.dataset.role === "accent" && config.appearanceMode === "by-appearance"
+      ? `accent-${previewAppearance}`
+      : role.dataset.role;
     if (id.startsWith("surface-") || id.startsWith("foreground-")) byId("advanced").open = true;
     byId(id).focus({ preventScroll: true });
     byId(id).scrollIntoView({ block: "nearest" });
@@ -423,7 +450,7 @@
   }
 
   function showPalette() {
-    const resolved = Object.entries(theme.roleValues(config))
+    const resolved = Object.entries(theme.roleValues(config, previewAppearance))
       .filter(([, value]) => HEX.test(value))
       .map(([role, value]) => [role.replace("--chad-", ""), value]);
     const groups = [
@@ -459,6 +486,10 @@
 
   form.addEventListener("input", (event) => updateField(event.target));
   form.addEventListener("submit", (event) => event.preventDefault());
+  previewAppearanceSelect.addEventListener("change", () => {
+    previewAppearance = previewAppearanceSelect.value;
+    refreshTheme();
+  });
   byId("presets").addEventListener("click", (event) => {
     const button = event.target.closest("[data-preset]");
     if (!button) return;

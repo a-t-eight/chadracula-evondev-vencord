@@ -1,7 +1,5 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
-const { readFileSync } = require("node:fs");
-const { join } = require("node:path");
 const { exportCSS } = require("../studio/theme.js");
 
 const playwright = process.env.CHADRACULA_PLAYWRIGHT || "playwright";
@@ -78,34 +76,121 @@ const fixture = `<!doctype html><html class="theme-dark"><head><style>
   </section>
 </div></body></html>`;
 
-test("plugin cards use the raised surface only in themed appearances", async () => {
+test("appearance exports apply colors and plugin card surfaces only inside their active Discord scopes", async () => {
   const { chromium } = require(playwright);
   const browser = await chromium.launch({ executablePath, headless: true });
   try {
     const page = await browser.newPage();
     await page.setContent(`<!doctype html><html><head><style>
-      .theme-light, .theme-dark, .theme-darker, .theme-midnight { --card-background-default: #FFF; }
-      .vc-card-base, .vc-addon-card { background: var(--card-background-default); }
-      .vc-card-warning { background: #443725; }
-    </style></head><body><div id="app-mount"><section id="settings">
-      <div class="vc-card-base vc-card-normal">Plugin Management</div>
-      <div class="vc-addon-card">Plugin</div>
-      <div class="vc-card-base vc-card-warning">Restart required</div>
-    </section></div></body></html>`);
-    const switcher = readFileSync(join(__dirname, "../switchers/chadracula-appearance-switcher.theme.css"), "utf8");
-    for (const [name, css] of [["dark-only", exportCSS({})], ["switcher", switcher]]) {
-      const style = await page.addStyleTag({ content: css });
-      for (const appearance of ["theme-light", "theme-dark", "theme-darker", "theme-midnight"]) {
-        const backgrounds = await page.evaluate((appearance) => {
-          document.documentElement.className = appearance;
-          const settings = document.getElementById("settings");
-          settings.className = appearance;
-          return Array.from(settings.children, (card) => getComputedStyle(card).backgroundColor);
-        }, appearance);
-        const normal = name === "dark-only" && appearance === "theme-light" ? "rgb(255, 255, 255)" : "rgb(35, 35, 61)";
-        assert.deepEqual(backgrounds, [normal, normal, "rgb(68, 55, 37)"], `${name} / ${appearance}`);
+      :root, .theme-light, .custom-user-profile-theme, .enable-forced-colors {
+        --control-primary-background-default: #5865F2;
+        --card-background-default: #E5E7EA;
+        --modal-background: #FFFFFF;
+        --text-default: #2E2E34;
       }
+      .theme-light { color-scheme: light; }
+      .vc-card-base, .vc-addon-card { background: var(--card-background-default); }
+      .modal { background: var(--modal-background); color: var(--text-default); }
+      button { background: var(--control-primary-background-default); }
+      #app-mount, .chatContent_f75fb0 { min-height: 100px; }
+    </style></head><body><div id="app-mount">
+      <section class="chat_f75fb0"><header class="themed__9293f">General</header>
+        <main class="chatContent_f75fb0"><button id="send">Send</button></main>
+      </section>
+      <div class="vc-card-base" id="outer-card">Plugin</div>
+      <div class="theme-light modal" id="dialog">
+        <div class="vc-card-base vc-addon-card" id="dialog-card">Plugin in settings</div>
+        <div class="theme-dark custom-user-profile-theme"><div class="vc-addon-card" id="profile-card">Profile</div></div>
+        <div class="theme-dark enable-forced-colors"><div class="vc-addon-card" id="forced-card">Accessibility</div></div>
+      </div>
+    </div></body></html>`);
+    const stockAccent = "rgb(88, 101, 242)";
+    const stockCard = "rgb(229, 231, 234)";
+    const themedCard = "rgb(35, 35, 61)";
+    const violet = "rgb(154, 134, 253)";
+    const nativeLight = [stockCard, "rgb(255, 255, 255)", "rgb(46, 46, 52)", "light"];
+    const themedLight = [themedCard, themedCard, "rgb(248, 248, 242)", "dark"];
+    const modeAccents = [
+      ["theme-light", "rgb(5, 195, 255)"],
+      ["theme-dark", "rgb(255, 107, 203)"],
+      ["theme-dark theme-darker", violet],
+      ["theme-dark theme-midnight", "rgb(80, 250, 123)"],
+      ["theme-amoled", "rgb(80, 250, 123)"],
+      ["theme-light theme-dark", "rgb(5, 195, 255)"],
+    ];
+    for (const appearanceMode of ["dark-only", "all", "by-appearance"]) {
+      const style = await page.addStyleTag({ content: exportCSS({
+        appearanceMode, accent: "violet", window: "glass", opacity: 80,
+        appearanceAccents: { light: "nord_blue", ash: "pink", dark: "violet", onyx: "#50FA7B" },
+      }) });
+      for (const [classes, configuredAccent] of modeAccents) {
+        await page.evaluate((classes) => { document.documentElement.className = classes; }, classes);
+        const localLight = classes.includes("theme-light");
+        // Light's legacy path uses a native Light root without any accompanying dark provider.
+        if (localLight && classes.includes("theme-dark") && appearanceMode === "dark-only") continue;
+        const active = appearanceMode !== "dark-only" || !localLight;
+        const expectedAccent = active ? appearanceMode === "by-appearance" ? configuredAccent : violet : stockAccent;
+        const colors = await page.evaluate(() => {
+          const read = (id) => getComputedStyle(document.getElementById(id));
+          return {
+            accent: read("send").backgroundColor,
+            outerCard: read("outer-card").backgroundColor,
+            dialog: [read("dialog-card").backgroundColor, read("dialog").backgroundColor, read("dialog").color, read("dialog").colorScheme],
+            exclusions: [read("profile-card").backgroundColor, read("forced-card").backgroundColor],
+            paint: getComputedStyle(document.querySelector(".chatContent_f75fb0")).backgroundImage,
+          };
+        });
+        const state = `${appearanceMode} / ${classes}`;
+        assert.equal(colors.accent, expectedAccent, state);
+        assert.equal(colors.outerCard, active ? themedCard : stockCard, state);
+        assert.deepEqual(colors.dialog, active && localLight ? themedLight : nativeLight, state);
+        assert.deepEqual(colors.exclusions, [stockCard, stockCard], state);
+        if (active) assert.match(colors.paint, /^radial-gradient\(.*0\.8\)/, state);
+        else assert.equal(colors.paint, "none", state);
+      }
+      await page.evaluate(() => { document.documentElement.className = "theme-light enable-forced-colors"; });
+      for (const forcedColors of ["none", "active"]) {
+        if (forcedColors === "active") {
+          await page.evaluate(() => { document.documentElement.className = "theme-light"; });
+          await page.emulateMedia({ forcedColors });
+        }
+        assert.equal(await page.locator("#outer-card").evaluate((card) =>
+          getComputedStyle(card).getPropertyValue("--card-background-default").trim()), "#E5E7EA", `${appearanceMode} ${forcedColors}`);
+      }
+      await page.emulateMedia({ forcedColors: "none" });
       await style.evaluate((node) => node.remove());
+    }
+  } finally {
+    await browser.close();
+  }
+});
+
+test("Flat and Framed Glass clear the host backdrop in each enabled appearance", async () => {
+  const { chromium } = require(playwright);
+  const browser = await chromium.launch({ executablePath, headless: true });
+  try {
+    const page = await browser.newPage();
+    await page.setContent(`<!doctype html><html><head><style>
+      html { background-color: #332244; }
+      body { background-color: #443355; }
+      #app-mount { background-color: #554466; }
+    </style></head><body><div id="app-mount">Native backdrop</div></body></html>`);
+    for (const layout of ["flat", "framed"]) {
+      for (const appearanceMode of ["dark-only", "all", "by-appearance"]) {
+        const style = await page.addStyleTag({ content: exportCSS({ appearanceMode, layout, window: "glass" }) });
+        for (const appearance of ["theme-light", "theme-darker"]) {
+          const backgrounds = await page.evaluate((appearance) => {
+            document.documentElement.className = appearance;
+            return [document.documentElement, document.body, document.getElementById("app-mount")]
+              .map((element) => getComputedStyle(element).backgroundColor);
+          }, appearance);
+          const expected = appearanceMode === "dark-only" && appearance === "theme-light"
+            ? ["rgb(51, 34, 68)", "rgb(68, 51, 85)", "rgb(85, 68, 102)"]
+            : Array(3).fill("rgba(0, 0, 0, 0)");
+          assert.deepEqual(backgrounds, expected, `${layout} / ${appearanceMode} / ${appearance}`);
+        }
+        await style.evaluate((element) => element.remove());
+      }
     }
   } finally {
     await browser.close();
@@ -282,8 +367,11 @@ test("Framed Friends and adjacent main pages share the title rail color outside 
       </div><div role="dialog" id="settings" style="background: orange"><header class="themed_ybUK7Z"></header></div></main>
     </div></body></html>`);
     for (const window of ["solid", "glass"]) {
+      await page.evaluate((appearance) => { document.documentElement.className = appearance; },
+        window === "glass" ? "theme-light" : "theme-dark");
       const style = await page.addStyleTag({ content: exportCSS({
         layout: "framed", window, opacity: 80,
+        appearanceMode: window === "glass" ? "all" : "dark-only",
         surfaces: { rail: "#203040", sidebar: "#141423", canvas: "#23233D" },
       }) });
       for (const [panel, body, active] of [
@@ -517,6 +605,7 @@ test("the rail paint continues through the account exterior in both layouts", as
             title: [100, 10], rail: [5, 85], fade: [5, 129], behindCard: [5, 155], footer: [5, 177],
             sidebar: [100, 100], sidebarCorner: [41, 21], topJoin: [158, 21], lowerCorner: [41, 178],
             lowerEnd: [158, 178], header: [275, 35], headerCorner: [161, 21],
+            headerEndCorner: [418, 21], headerEndTop: [418, 20], headerEndInterior: [404, 30],
             chatLowerStart: [161, 178], chatLowerEnd: [418, 178],
             sidebarTop: [100, 20], chatTop: [275, 20], sidebarBelow: [100, 21], chatBelow: [275, 21],
             sidebarTopSecondPixel: [100, 20.5], chatTopSecondPixel: [275, 20.5],
@@ -540,6 +629,9 @@ test("the rail paint continues through the account exterior in both layouts", as
           }
           equalColor(pixels.sidebarCorner, rail, `${context}: rail-facing upper corner`);
           equalColor(pixels.lowerCorner, rail, `${context}: rail-facing lower corner`);
+          equalColor(pixels.headerEndCorner, rail, `${context}: rail tint outside upper chat end`);
+          equalColor(pixels.headerEndTop, rail, `${context}: top row outside upper chat end`);
+          equalColor(pixels.headerEndInterior, sidebar, `${context}: fill inside upper chat end`);
           if (layout === "framed") {
             for (const region of ["lowerEnd", "chatLowerStart", "chatLowerEnd"]) {
               equalColor(pixels[region], rail, `${context}: ${region}`);

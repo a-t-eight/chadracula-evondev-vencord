@@ -41,6 +41,11 @@
       <section class="appearance" aria-labelledby="appearance-heading">
         <h2 id="appearance-heading">Appearance</h2>
         <form id="appearance">
+          <div class="form-row appearance-mode-row">
+            <label for="appearanceMode">Export appearance</label>
+            <select id="appearanceMode" name="appearanceMode"></select>
+          </div>
+          <p class="subtle section-note" id="appearance-note" hidden>Light also uses Chadracula’s dark surfaces.</p>
           <div id="accent-editor">
             <div class="form-row accent-preset-row">
               <label for="accent">Accent preset</label>
@@ -59,6 +64,7 @@
             </div>
             <div class="accent-fields" data-accent-fields></div>
           </div>
+          <div id="appearance-accents" hidden></div>
           <div class="color-role-editor" id="text-editor"></div>
           <div class="form-row"><label for="layout">Pane layout</label><select id="layout" name="layout"></select></div>
           <div class="form-row"><label for="window">Window</label><select id="window" name="window"></select></div>
@@ -92,6 +98,10 @@
         </div>
       </header>
       <a class="mobile-control-link" href="#controls">Back to controls ↑</a>
+      <div class="form-row preview-appearance-row" id="preview-appearance-row" hidden>
+        <label for="preview-appearance">Preview appearance</label>
+        <select id="preview-appearance"></select>
+      </div>
       <p class="inspect-note" id="inspect-note" hidden>Choose a highlighted element to jump to its control.</p>
       <div class="preview-grid" id="preview-grid"></div>
 
