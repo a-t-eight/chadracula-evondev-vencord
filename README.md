@@ -2,9 +2,28 @@
 
 Chadracula-Evondev brings the NvChad Base46 palette to Discord desktop. Pick a ready-made theme for **Vesktop** or **Discord desktop with Vencord**, or customize one in the offline **Chadracula Studio**.
 
+## Switch accents with Appearance
+
+The Chadracula Appearance Switcher uses the Framed Glass layout and changes the accent when you select a theme under **User Settings → Appearance**. Light uses dark surfaces with a Nord Blue accent.
+
+| Discord appearance | Accent |
+| --- | --- |
+| Light | Nord Blue `#05C3FF` |
+| Ash | Pink `#FF6BCB` |
+| Dark or Onyx | Violet `#9A86FD` |
+
+1. In Vesktop or Discord desktop with Vencord, open **User Settings → Themes**. Disable any enabled Chadracula theme under **Local Themes**, including a local copy of the switcher.
+2. Under **Online Themes**, remove previous Chadracula entries and paste this single raw CSS URL on its own line, without an `@light` or `@dark` prefix.
+
+   ```text
+   https://raw.githubusercontent.com/a-t-eight/chadracula-evondev-vencord/refs/heads/main/switchers/chadracula-appearance-switcher.theme.css
+   ```
+
+3. Click outside the **Online Themes** text box to apply the change. Open **Appearance** to choose your accent. [Vencord’s Online Themes controls](https://github.com/Vendicated/Vencord/blob/e75ac9ace41f6212cfaa2d5f3670830be392da4e/src/components/settings/tabs/themes/OnlineThemesTab.tsx#L13-L26)
+
 ## Choose a theme
 
-Download one CSS file for your client. Use its matching JSON file to edit the theme in Studio.
+For a fixed accent and layout, download one CSS file for your client. Use its matching JSON file to edit the theme in Studio.
 
 | Accent | Flat Solid | Flat Glass | Framed Solid | Framed Glass |
 | --- | --- | --- | --- | --- |
@@ -15,6 +34,8 @@ Download one CSS file for your client. Use its matching JSON file to edit the th
 **Flat** uses continuous pane dividers and rounded corners beside the server rail. **Framed** adds rounded outlines around the panes. **Solid** gives the themed panes opaque fills. **Glass** ships with 80% pane opacity and can show the native backdrop when the client and OS expose it. The twelve themes use the inherited Base46 `teal` muted text role. It resolves to `#92A2D4` in Solid and `#ADB9DF` in Glass for readability.
 
 ## Install on macOS or Windows
+
+Use these steps for a fixed variant from the table above.
 
 1. Install [Vesktop](https://vesktop.dev/) or [Vencord for Discord desktop](https://vencord.dev/download/) using the corresponding project’s instructions.
 2. In the desktop client, open **User Settings → Themes → Local Themes → Open Themes Folder**. Copy the `.theme.css` file there and enable it under **Local Themes**. Select **Load missing Themes** if the file is absent from the list. [Vencord’s local theme controls](https://github.com/Vendicated/Vencord/blob/e75ac9ace41f6212cfaa2d5f3670830be392da4e/src/components/settings/tabs/themes/LocalThemesTab.tsx#L145-L194)
@@ -41,7 +62,7 @@ See the [testing report](TESTING.md) for the measured material behavior and clie
 
 ### Remove or switch themes
 
-Disable the current theme under **Local Themes**. Re-enable your previous theme or enable another Chadracula export. Restore the previous native material setting and fully quit and relaunch if you changed it. [Vencord theme recovery](https://vencord.dev/support/#my-themes-broke-and-now-i-cant-open-settings-or-disable-them)
+Remove the switcher URL from **Online Themes** and click outside the text box to apply the change. For a fixed variant, disable it under **Local Themes**. Re-enable your previous theme or enable another Chadracula export. Restore the previous native material setting and fully quit and relaunch if you changed it. [Vencord theme recovery](https://vencord.dev/support/#my-themes-broke-and-now-i-cant-open-settings-or-disable-them)
 
 ## Customize offline
 
