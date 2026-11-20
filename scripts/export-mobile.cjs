@@ -1,0 +1,102 @@
+const { mix, roleValues } = require("../studio/theme.js");
+
+// Discord mobile uses both redesign and legacy names. Each group takes its
+// resolved color from the same Studio role as the corresponding desktop surface.
+// Leave KEYBOARD and its legacy BACKGROUND_PRIMARY fallback unset so Kettu
+// lets iOS render the keyboard appearance. The chat and input fills use other tokens.
+const mobileRoles = {
+  canvas: [
+    "BG_BASE_PRIMARY", "BACKGROUND_MOBILE_PRIMARY", "CHAT_BACKGROUND", "BACKGROUND_BASE_LOWER",
+    "STANDALONE_CHANNEL_CONTENT_BACKGROUND", "MOBILE_KEYBOARD_GAP_BACKGROUND", "MOBILE_FLOATINGBAR_BACKGROUND_SCRIM",
+  ],
+  sidebar: ["BG_BASE_SECONDARY", "BACKGROUND_SECONDARY", "BACKGROUND_MOBILE_SECONDARY", "BACKGROUND_BASE_LOW", "CHANNEL_BACKGROUND_DEFAULT", "PANEL_BG"],
+  rail: ["BG_BASE_TERTIARY", "BACKGROUND_TERTIARY", "BACKGROUND_BASE_LOWEST"],
+  raised: [
+    "BG_SURFACE_RAISED", "BG_SURFACE_OVERLAY", "BG_SURFACE_OVERLAY_TMP", "BACKGROUND_FLOATING",
+    "BACKGROUND_SECONDARY_ALT", "BACKGROUND_SURFACE_HIGH", "BACKGROUND_SURFACE_HIGHER", "BACKGROUND_SURFACE_HIGHEST",
+    "CARD_PRIMARY_BG", "CARD_BACKGROUND_DEFAULT", "MODAL_BACKGROUND", "MODAL_FOOTER_BACKGROUND",
+    "MOBILE_ACTIONSHEET_BACKGROUND", "MOBILE_ACTIONSHEET_GRADIENT_BACKGROUND_DEFAULT",
+    "REDESIGN_BUTTON_SECONDARY_BACKGROUND",
+    "MOBILE_CHATINPUT_BACKGROUND_DEFAULT", "CHAT_INPUT_ACTION_BUTTON_BACKGROUND",
+  ],
+  input: ["CHAT_INPUT_BACKGROUND", "CHAT_INPUT_CONTAINER_BACKGROUND", "REDESIGN_CHAT_INPUT_BACKGROUND", "INPUT_BACKGROUND", "INPUT_BACKGROUND_DEFAULT"],
+  text: [
+    "TEXT_NORMAL", "TEXT_DEFAULT", "TEXT_PRIMARY", "TEXT_STRONG", "HEADER_PRIMARY", "ICON_STRONG",
+    "INPUT_TEXT_DEFAULT", "INTERACTIVE_ACTIVE", "INTERACTIVE_TEXT_ACTIVE", "INTERACTIVE_ICON_ACTIVE",
+    "REDESIGN_BUTTON_SECONDARY_TEXT", "CONTROL_SECONDARY_TEXT_ACTIVE",
+    "CONTROL_SECONDARY_TEXT_HOVER", "CONTROL_SECONDARY_ICON_DEFAULT", "CONTROL_SECONDARY_ICON_HOVER", "CONTROL_SECONDARY_ICON_ACTIVE",
+    "MOBILE_TEXT_HEADING_PRIMARY", "REDESIGN_BUTTON_TERTIARY_PRESSED_TEXT", "REDESIGN_CHANNEL_NAME_TEXT",
+  ],
+  "subtle-text": ["HEADER_SECONDARY", "TEXT_SECONDARY", "TEXT_SUBTLE", "ICON_DEFAULT", "TABLEROW_ICON_COLOR_DEFAULT"],
+  muted: [
+    "TEXT_MUTED", "ICON_MUTED", "ICON_SUBTLE", "CHANNEL_ICON", "CHANNELS_DEFAULT", "INTERACTIVE_NORMAL",
+    "INTERACTIVE_TEXT_DEFAULT", "INTERACTIVE_ICON_DEFAULT", "INPUT_PLACEHOLDER_TEXT_DEFAULT", "CHANNEL_TEXT_AREA_PLACEHOLDER",
+    "MOBILE_HEADER_ICON_DEFAULT", "NAVIGATOR_HEADER_TINT", "CHAT_INPUT_ACTION_BUTTON_ICON_DEFAULT_TINT", "CHAT_INPUT_ICON_DEFAULT_TINT",
+    "REDESIGN_CHANNEL_NAME_MUTED_TEXT",
+  ],
+  border: ["BORDER_SUBTLE", "BORDER_FAINT", "BORDER_MUTED", "MOBILE_HEADER_BORDER", "STANDALONE_CHANNEL_HEADER_BORDER"],
+  "control-border": ["INPUT_BORDER_DEFAULT", "BORDER_STRONG", "MOBILE_CHATINPUT_BORDER_DEFAULT"],
+  link: ["TEXT_LINK", "ICON_LINK"],
+  accent: [
+    "BACKGROUND_BRAND", "BG_BRAND", "CONTROL_PRIMARY_BACKGROUND_DEFAULT",
+    "REDESIGN_BUTTON_PRIMARY_BACKGROUND", "CHAT_INPUT_SEND_BUTTON_ACTIVE_BACKGROUND",
+  ],
+  "accent-text": [
+    "TEXT_BRAND", "ICON_BRAND", "CONTROL_BRAND_FOREGROUND", "BORDER_FOCUS", "FOCUS_PRIMARY", "INPUT_BORDER_ACTIVE",
+    "MOBILE_CHATINPUT_BORDER_ACTIVE", "CHAT_INPUT_ACTION_ICON_ACTIVE_TINT",
+    "CONTROL_SECONDARY_TEXT_DEFAULT", "REDESIGN_BUTTON_TERTIARY_TEXT", "CONTROL_ICON_ONLY_ICON_DEFAULT",
+  ],
+  "accent-hover": ["CONTROL_PRIMARY_BACKGROUND_HOVER"],
+  "accent-active": ["CONTROL_PRIMARY_BACKGROUND_ACTIVE", "REDESIGN_BUTTON_PRIMARY_PRESSED_BACKGROUND"],
+  "on-accent": [
+    "REDESIGN_BUTTON_PRIMARY_TEXT", "CHAT_INPUT_SEND_BUTTON_ICON_ACTIVE_TINT", "CONTROL_PRIMARY_TEXT_DEFAULT",
+    "CONTROL_PRIMARY_TEXT_HOVER", "CONTROL_PRIMARY_TEXT_ACTIVE", "CONTROL_PRIMARY_ICON_DEFAULT", "CONTROL_PRIMARY_ICON_HOVER", "CONTROL_PRIMARY_ICON_ACTIVE",
+  ],
+  hover: ["BACKGROUND_MODIFIER_HOVER", "CONTROL_SECONDARY_BACKGROUND_HOVER"],
+  active: [
+    "BACKGROUND_MODIFIER_ACTIVE", "CONTROL_SECONDARY_BACKGROUND_ACTIVE", "REDESIGN_BUTTON_SECONDARY_PRESSED_BACKGROUND",
+    "MOBILE_CHATINPUT_BACKGROUND_ACTIVE",
+  ],
+  "selected-surface": ["BACKGROUND_MODIFIER_SELECTED", "MOBILE_CHANNEL_ITEM_BACKGROUND_SELECTED"],
+  mention: ["MENTION_FOREGROUND"],
+  "mention-bg": ["BACKGROUND_MENTIONED", "MESSAGE_MENTIONED_BACKGROUND_DEFAULT"],
+  "mention-chip-bg": ["MENTION_BACKGROUND"],
+  success: ["TEXT_POSITIVE", "TEXT_FEEDBACK_POSITIVE", "ICON_FEEDBACK_POSITIVE", "STATUS_POSITIVE", "ICON_STATUS_ONLINE"],
+  warning: ["TEXT_WARNING", "TEXT_FEEDBACK_WARNING", "ICON_FEEDBACK_WARNING", "STATUS_WARNING", "ICON_STATUS_IDLE"],
+  danger: ["TEXT_DANGER", "TEXT_FEEDBACK_CRITICAL", "ICON_FEEDBACK_CRITICAL", "STATUS_DANGER", "ICON_STATUS_DND"],
+  info: ["TEXT_FEEDBACK_INFO", "ICON_FEEDBACK_INFO"],
+};
+
+function exportMobileTheme(config, accentLabel) {
+  const roles = roleValues(config);
+  const semanticColors = {};
+  for (const [role, tokens] of Object.entries(mobileRoles)) {
+    const roleColor = roles[`--chad-${role}`];
+    for (const token of tokens) {
+      semanticColors[token] = [roleColor, roleColor];
+    }
+  }
+  // The unread banner shares this fill with legacy brand surfaces. Redesigned
+  // primary controls use their own tokens and retain the brighter accent.
+  const banner = mix(roles["--chad-canvas"], roles["--chad-accent"], 0.16);
+  semanticColors.BACKGROUND_BRAND = [banner, banner];
+  // Use the desktop Glass preset's 80% tint for controls that float over an app surface.
+  const glassTint = roles["--chad-raised"] + "CC";
+  for (const token of ["MOBILE_FLOATINGBAR_BACKGROUND", "MOBILE_FLOATINGBAR_BACKGROUND_NAMEPLATE", "CONTROL_SECONDARY_BACKGROUND_DEFAULT"]) {
+    semanticColors[token] = [glassTint, glassTint];
+  }
+  // Both spec 2 resolvers otherwise inherit the opaque floating surface here.
+  const scrim = roles["--chad-canvas"] + "B3";
+  semanticColors.BG_BACKDROP = [scrim, scrim];
+  return {
+    spec: 2,
+    name: `Chadracula ${accentLabel}`,
+    description: "Chadracula-Evondev for Discord mobile, with translucent controls and a fixed accent.",
+    authors: [{ name: "a-t-eight" }],
+    semanticColors,
+    // The iOS native initializer accepts a dictionary even with zero raw overrides.
+    rawColors: {},
+  };
+}
+
+module.exports = { exportMobileTheme };

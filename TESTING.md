@@ -106,3 +106,43 @@ The following contrast ratios are estimates from native Discord Light window cap
 Vesktop in Light reproduced the seam change from two to four device pixels below the toolbar. Sampled contrast rose from 1.01:1 to 11.00:1 on the DM search label, from 1.05:1 to 14.38:1 on Account Edit, and from 1.15:1 to 11.55:1 on the Notification Log quick action. With a separate all-appearances Flat Glass export in Light, all nine sampled columns across the join had the same median RGB (41, 41, 53).
 
 Chromium checked the standalone switcher and all three Studio export modes, including hover and pressed text and icons, disabled controls, and nested Light settings. It also checked custom profile themes and forced-color providers.
+
+## Mobile theme verification
+
+The [mobile manifest](mobile/manifest.json) records one generated spec 2 file per desktop accent. The generation and unit checks verify the same semantic values in both appearance slots, contrast for all primary button states, selected channel text, translucent secondary controls, and the unread banner. Each variant leaves the native keyboard paint and legacy fallback unset.
+
+| Accent | Primary label on default / hover / active fill | White unread banner text |
+| --- | --- | ---: |
+| Nord Blue | 8.89:1 / 8.09:1 / 7.50:1 | 13.66:1 |
+| Pink | 7.12:1 / 6.53:1 / 6.07:1 | 14.21:1 |
+| Violet | 6.24:1 / 5.73:1 / 5.38:1 | 14.38:1 |
+
+These ratios are calculated from the exported colors. Physical checks covered Violet with Kettu. Nord Blue, Pink, and native Rain rendering remain untested on devices.
+
+The three release JSON files passed 36 isolated parser checks using the pinned Kettu and Rain spec 2 implementations. The checks exercised Auto, Dark, and Light for the iOS and Android paths, including preservation of eight-digit colors and empty raw overrides. The harness used native boundary stubs. [Kettu parser](https://github.com/C0C0B01/Kettu/blob/e345bb14d357093ec3ba37b660030fd466a654c3/src/lib/addons/themes/colors/parser.ts#L61-L103) · [Rain parser](https://github.com/ra1ncord/rain/blob/4b091e1698aa983c5f4e694ae243c9a6fd8b52fb/src/plugins/_core/painter/themes/parser.ts#L63-L102)
+
+### Violet on iPhone
+
+The [Violet mobile JSON](mobile/violet.json) was checked on a physical iPhone running iOS 27.0.1, Discord+ 345.0 PTB (112811), and Kettu 1.4.3. The channel header, composer, Settings heading, and Settings row icons were checked in Auto, Dark, and Light.
+
+Direct iPhone PNGs showed `#141423` on the chat header, message canvas, and outer edge beneath the composer in all three modes. The header shares its backing with the iOS status bar. The dark header retains contrast for the app controls while leaving the native black status ink at 1.15:1 on the shared backing.
+
+| Foreground on the chat header | Contrast |
+| --- | ---: |
+| Warm-white title (`#F8F8F2`) | 17.07:1 |
+| Online-count text (`#E9E9F4`) | 15.10:1 |
+| Back arrow and chevron tint (`#92A2D4`) | 7.23:1 |
+
+In Auto, Dark, and Light, the guild channel pane and server-name header used `#141423`, matching the desktop palette. The guild rail used `#19192C` and the selected row used `#2C294A`. Sampled selected and ordinary channel names used `#F8F8F2`, while muted labels used `#92A2D4`.
+
+Native captures in all three modes showed `#9A86FD` ink for the Messages search, request count, and Add Friends buttons, and for Channel Info search, notification, and settings icons. The Messages buttons rendered `#202038` over their dark pane. In the Messages view, the floating profile card rendered `#1F1F37` in Auto and Dark and predominantly `#202037` in Light. Samples through the lower fade remained dark Violet (`#121220` in Auto and Dark and `#131321` in Light). The app composites the translucent card and controls over its existing surfaces.
+
+In a live channel with unread messages, the Smoked Violet banner rendered `#292646` with a visible light label and dismiss icon. Pure white on that configured fill computes to 14.38:1. Discord shares the fill with other brand surfaces, including the message-request dot. The chat APP tag sampled in this test still rendered stock blue (`#5865F2`).
+
+An earlier export hid keyboard key faces and letters in chat and Settings search. Omitting `KEYBOARD` and its native fallback `BACKGROUND_PRIMARY` restored the translucent Apple keyboard in Kettu Themes search in Auto, Dark, and Light. A cold start in Auto confirmed text entry, backspace, and switching between letter and number layouts in Settings search, and visible key faces and letters in the chat composer. Chat and input fills use separate tokens.
+
+With Violet selected in Auto and Light, native captures showed a `#000000` status strip above Settings and Options. The sheets used `#23233D`. The charging battery remained visible, while the clock, signal and Wi-Fi did not. With Violet deselected in Auto, the same Settings view showed a white clock, signal and Wi-Fi on the same `#000000` backing. A theme JSON control for the sheet status-bar style remains unverified.
+
+### NexxUtils compatibility
+
+NexxUtils 1.0.1 **Colorful Channels** requests `REDESIGN_BUTTON_DESTRUCTIVE_BACKGROUND` and `REDESIGN_BUTTON_DESTRUCTIVE_TEXT` for the trailing NSFW tag. Discord build 112811 omits both roles. In Kettu, disabling only **NSFW tag** and switching away from and back to the guild removed the unreadable labels while keeping the warning icons visible. A locally tested plugin change using the registered primary control fill and text roles produced legible violet badges on the same rows. The release ships theme JSON files. [NexxUtils badge source](https://github.com/nexpid/RevengePlugins/blob/1c9194a378c9fbbefcc178c0325abdee71ca0650/src/stuff/components/TextBadge.tsx#L20-L45)

@@ -1135,7 +1135,7 @@ ${styles}`;
 
   const theme = Object.freeze({
     defaults, options, palette, colorRoles, appearances, defaultAppearanceMode, uniformityPaint, filename: exportIdentity().filename,
-    normalizeConfig, getColorChoice, setColorChoice, inputColor, roleValues, exportIdentity, exportCSS, lightAppearanceCSS,
+    normalizeConfig, getColorChoice, setColorChoice, inputColor, roleValues, exportIdentity, exportCSS, lightAppearanceCSS, mix,
   });
   if (typeof module === "object" && module.exports) module.exports = theme;
   else globalThis.ChadraculaTheme = theme;

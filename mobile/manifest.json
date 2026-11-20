@@ -1,0 +1,27 @@
+{
+  "format": "chadracula-mobile-release",
+  "version": 1,
+  "themes": [
+    {
+      "name": "Chadracula Nord Blue",
+      "accent": "nord_blue",
+      "accentColor": "#05C3FF",
+      "file": "nord-blue.json",
+      "sha256": "67a1ed9958bf211fbcfb13488dc304c4bfdcc477494c85519b931ec17fac6745"
+    },
+    {
+      "name": "Chadracula Pink",
+      "accent": "pink",
+      "accentColor": "#FF6BCB",
+      "file": "pink.json",
+      "sha256": "a95d10df2f5e368c301e6f115672db7f70ba599e5382347116c98880168e68d2"
+    },
+    {
+      "name": "Chadracula Violet",
+      "accent": "violet",
+      "accentColor": "#9A86FD",
+      "file": "violet.json",
+      "sha256": "8524b4c516cefb6c98c92d6c286a0186f69378ad2008d46d91ce838c0cbd76f3"
+    }
+  ]
+}
