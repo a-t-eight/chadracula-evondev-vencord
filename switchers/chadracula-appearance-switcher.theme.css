@@ -48,11 +48,11 @@
    Light selects the Nord Blue dark palette. Onyx and legacy AMOLED select Violet.
    Source exports
    chadracula-nord-blue-glass-framed-teal.theme.css
-   SHA-256 e3fe9b258059f62368ebb91e84c14e4b2211267ef3469d3bfae8d47f4398ca58
+   SHA-256 11a85777b5cb9a5a82425eee9b182d57732e0d97031d2bd070f79185032d984f
    chadracula-pink-glass-framed-teal.theme.css
-   SHA-256 9e33d90cc811015653c184416e4b93f87a28170d871a9969d4672a4d011c9e36
+   SHA-256 e981bea800e055b59dd4df0802bac85bc2e4f0e71ab6062bc9c199659a48de3c
    chadracula-violet-glass-framed-teal.theme.css
-   SHA-256 d0bcab6e2c5259deceb5864be2163d14b7d043863e0302e496b6fbad388c19ca
+   SHA-256 a23dc7224ee48e64b2064077d3c4a458d843d68acda668c1617df0839d28b607
 */
 
 @media not (forced-colors: active) {
@@ -606,6 +606,22 @@ html:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled) > bo
    column on the shell so the tint continues through the fade and footer. */
 :is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebar_pog62O, .sidebar_c48ade):has(:is(.wrapper_5dqHTG, .wrapper_ef3116)) {
   background: linear-gradient(var(--chad-rail-paint), var(--chad-rail-paint)) var(--chad-inline-start) top / var(--custom-guild-list-width) 100% no-repeat;
+}
+
+/* BetterFolders animates a second, full-height column beside the guild rail. */
+:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebar_pog62O, .sidebar_c48ade):has(:is(.wrapper_5dqHTG, .wrapper_ef3116)) > .vc-betterFolders-sidebar {
+  background-color: var(--chad-rail-paint);
+}
+
+/* The loaded composer overlaps the 16px message fade. Its exposed ends
+   would otherwise paint an opaque canvas color in the composer gutters. */
+:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chatContent_z_gUBg, .chatContent_f75fb0):has(> form[class*="formWithLoadedChatInput_"]) [class^="messagesWrapper_"] > [class^="chatGradient_"] {
+  background-image: none;
+}
+
+/* Discord already clips an overflowing topic with an ellipsis. */
+:is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.themed_ybUK7Z, .themed__9293f) [class^="children_"]:has(> [class^="topic_"])::after {
+  content: none;
 }
 
 :is(:scope, .theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebar_pog62O, .sidebar_c48ade):has(:is(.wrapper_5dqHTG, .wrapper_ef3116)) :is(.wrapper_5dqHTG, .wrapper_ef3116),

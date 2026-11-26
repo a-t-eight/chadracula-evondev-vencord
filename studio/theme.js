@@ -827,6 +827,22 @@ ${view} ${railShell} {
   background: linear-gradient(${railPaint}, ${railPaint}) ${inlineStart} top / var(--custom-guild-list-width) 100% no-repeat;
 }
 
+/* BetterFolders animates a second, full-height column beside the guild rail. */
+${view} ${railShell} > .vc-betterFolders-sidebar {
+  background-color: ${railPaint};
+}
+
+/* The loaded composer overlaps the 16px message fade. Its exposed ends
+   would otherwise paint an opaque canvas color in the composer gutters. */
+${view} ${chatContent}:has(> form[class*="formWithLoadedChatInput_"]) [class^="messagesWrapper_"] > [class^="chatGradient_"] {
+  background-image: none;
+}
+
+/* Discord already clips an overflowing topic with an ellipsis. */
+${view} ${channelHeader} [class^="children_"]:has(> [class^="topic_"])::after {
+  content: none;
+}
+
 ${view} ${railShell} ${serverRail},
 ${view} ${railShell}::after {
   background: transparent;

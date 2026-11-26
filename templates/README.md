@@ -1,5 +1,7 @@
 # Violet Glass templates
 
+Use the Flat and Framed templates from `v1.1.1` as the baseline for new color revisions. Studio applies the BetterFolders rail tint and the composer and channel-topic fade fixes to both Glass and Solid exports.
+
 Open [Chadracula Studio](../studio/index.html), choose **Import config**, then open [Flat Glass](flat-glass/config.json) or [Framed Glass](framed-glass/config.json). Both templates use the Violet accent, warm primary text, 80% pane opacity, rainbow thread colors, pink links, tinted selection, and the Base46 `cyan` muted-text override.
 
 Framed Glass rounds both upper corners of the main panel and uses one rail tint outside each corner. The title bar and server rail use the same tint. Flat Glass rounds the outer upper edges in Home and the outer upper chat corner in servers. Home has a continuous fill below the DM search row and above the main pane. Both guild header dividers remain visible.

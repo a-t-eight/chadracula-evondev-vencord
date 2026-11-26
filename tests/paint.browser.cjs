@@ -746,3 +746,55 @@ test("the rail paint continues through the account exterior in both layouts", as
     await browser.close();
   }
 });
+
+test("BetterFolders paints its animated width once and loaded chat gutters stay clear", async () => {
+  const { chromium } = require(playwright);
+  const browser = await chromium.launch({ executablePath, headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 300, height: 180 } });
+    for (const window of ["glass", "solid"]) {
+      for (const layout of ["flat", "framed"]) {
+        await page.setContent(`<html class="theme-dark"><style>
+          html { background: white } body { margin:0 }
+          #app-mount { --custom-guild-list-width:40px }
+          .sidebar_pog62O { display:flex; height:70px }
+          nav { width:40px; height:48px }
+          .children_ybUK7Z::after { content:""; background:linear-gradient(90deg,transparent,black) }
+          .topic_pVbL3l { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:45px }
+          .chatGradient_8AE1Qq { background-image:linear-gradient(transparent,black) }
+        </style><div id="app-mount">
+          <div class="sidebar_pog62O"><nav class="wrapper_5dqHTG"></nav>
+            <div class="vc-betterFolders-sidebar"><nav class="wrapper_5dqHTG"></nav></div>
+          </div>
+          <header class="themed_ybUK7Z"><div class="children_ybUK7Z"><div class="topic_pVbL3l">Long channel topic</div></div></header>
+          <main class="chatContent_z_gUBg"><div class="messagesWrapper_8AE1Qq"><div class="chatGradient_8AE1Qq"></div></div>
+            <form class="formWithLoadedChatInput_z_gUBg"></form></main>
+        </div></html>`);
+        await page.addStyleTag({ content: exportCSS({ window, layout }) });
+        for (const width of [0, 19, 40]) {
+          await page.locator(".vc-betterFolders-sidebar").evaluate((el, w) => {
+            el.style.width = w + "px";
+            el.style.overflow = "hidden";
+          }, width);
+          const pixels = await samplePixels(page, {
+            primary: [5, 64], folder: [40 + Math.max(0, width - 2), 64],
+            folderNav: [40 + Math.max(0, width - 2), 20], outside: [41 + width, 64],
+          });
+          equalColor(pixels.folder, width ? pixels.primary : pixels.outside, `${window}/${layout}: folder footer ${width}`);
+          equalColor(pixels.folderNav, pixels.folder, "nested rail carries exactly one tint");
+          assert.notDeepEqual(pixels.primary, pixels.outside);
+        }
+        const gradient = page.locator(".chatGradient_8AE1Qq");
+        assert.equal(await gradient.evaluate(el => getComputedStyle(el).backgroundImage), "none");
+        assert.equal(await page.locator(".children_ybUK7Z").evaluate(el => getComputedStyle(el, "::after").content), "none");
+        assert.equal(await page.locator(".topic_pVbL3l").evaluate(el => getComputedStyle(el).textOverflow), "ellipsis");
+        await page.locator("form").evaluate(el => el.remove());
+        assert.match(await gradient.evaluate(el => getComputedStyle(el).backgroundImage), /linear-gradient/);
+        await page.locator(".topic_pVbL3l").evaluate(el => el.remove());
+        assert.equal(await page.locator(".children_ybUK7Z").evaluate(el => getComputedStyle(el, "::after").content), '""');
+      }
+    }
+  } finally {
+    await browser.close();
+  }
+});

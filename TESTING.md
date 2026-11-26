@@ -107,6 +107,16 @@ Vesktop in Light reproduced the seam change from two to four device pixels below
 
 Chromium checked the standalone switcher and all three Studio export modes, including hover and pressed text and icons, disabled controls, and nested Light settings. It also checked custom profile themes and forced-color providers.
 
+## BetterFolders, chat fades and right-hand corners
+
+The Flat Glass, Framed Glass, Flat Solid and Framed Solid exports were each checked in Discord with Vencord and in Vesktop on both Windows and macOS. All 16 client and variant combinations passed. Windows Discord used Acrylic with client transparency on. Windows Vesktop used its existing None setting. Windows used the Pink release stylesheets. Both macOS clients used Nord Blue Studio exports covering Light appearance.
+
+With BetterFolders expanded, the secondary rail carried the rail tint through the space below the account card. Closing and reopening a folder in both Vesktop clients confirmed that the tint followed the added column. The paint regression also checks a partially opened folder.
+
+Disabling the native message gradient alone removed the dark edge beside the composer. Disabling the header overlay alone removed the dark stripe at the end of the topic. The corrected exports preserved the topic ellipsis and produced matching color samples on both sides of each former seam in all 16 cases.
+
+Theme-on and theme-off captures covered both right-hand corners in all four clients. Windows Discord was also compared in restored and maximized windows. The Framed pane retained its inner arc, and the native window silhouette persisted with the theme disabled.
+
 ## Mobile theme verification
 
 The [mobile manifest](mobile/manifest.json) records one generated spec 2 file per desktop accent. The generation and unit checks verify the same semantic values in both appearance slots, contrast for all primary button states, selected channel text, translucent secondary controls, and the unread banner. Each variant leaves the native keyboard paint and legacy fallback unset.

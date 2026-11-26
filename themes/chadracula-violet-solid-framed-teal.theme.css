@@ -518,6 +518,22 @@
   background: linear-gradient(var(--chad-rail-paint), var(--chad-rail-paint)) var(--chad-inline-start) top / var(--custom-guild-list-width) 100% no-repeat;
 }
 
+/* BetterFolders animates a second, full-height column beside the guild rail. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebar_pog62O, .sidebar_c48ade):has(:is(.wrapper_5dqHTG, .wrapper_ef3116)) > .vc-betterFolders-sidebar {
+  background-color: var(--chad-rail-paint);
+}
+
+/* The loaded composer overlaps the 16px message fade. Its exposed ends
+   would otherwise paint an opaque canvas color in the composer gutters. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.chatContent_z_gUBg, .chatContent_f75fb0):has(> form[class*="formWithLoadedChatInput_"]) [class^="messagesWrapper_"] > [class^="chatGradient_"] {
+  background-image: none;
+}
+
+/* Discord already clips an overflowing topic with an ellipsis. */
+:is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.themed_ybUK7Z, .themed__9293f) [class^="children_"]:has(> [class^="topic_"])::after {
+  content: none;
+}
+
 :is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebar_pog62O, .sidebar_c48ade):has(:is(.wrapper_5dqHTG, .wrapper_ef3116)) :is(.wrapper_5dqHTG, .wrapper_ef3116),
 :is(.theme-dark, .theme-darker, .theme-midnight, .theme-amoled):not(.custom-user-profile-theme, .custom-user-profile-theme *, .enable-forced-colors, .enable-forced-colors *) #app-mount :is(.sidebar_pog62O, .sidebar_c48ade):has(:is(.wrapper_5dqHTG, .wrapper_ef3116))::after {
   background: transparent;
